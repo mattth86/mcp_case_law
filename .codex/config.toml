@@ -1,0 +1,10 @@
+[mcp_servers.epo-case-law]
+command = "dotnet"
+args = [
+    "run",
+    "--project",
+    "EpoCaseLaw",
+    "-c",
+    "Release",
+    "--no-build",
+]

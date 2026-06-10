@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+            xmlns:xlink="http://www.w3.org/1999/xlink" 
+            elementFormDefault="qualified" 
+            targetNamespace="http://www.w3.org/1999/xlink">
+  <xsd:attribute name="type">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:token">
+        <xsd:enumeration value="simple"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+  <xsd:attribute name="href"/>
+  <xsd:attribute name="role"/>
+  <xsd:attribute name="title"/>
+  <xsd:attribute name="show">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:token">
+        <xsd:enumeration value="embed"/>
+        <xsd:enumeration value="new"/>
+        <xsd:enumeration value="none"/>
+        <xsd:enumeration value="other"/>
+        <xsd:enumeration value="replace"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+  <xsd:attribute name="actuate">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:token">
+        <xsd:enumeration value="none"/>
+        <xsd:enumeration value="onLoad"/>
+        <xsd:enumeration value="onRequest"/>
+        <xsd:enumeration value="other"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+</xsd:schema>

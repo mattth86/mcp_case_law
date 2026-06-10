@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "epo-case-law": {
+      "type": "stdio",
+      "command": "dotnet",
+      "args": ["run", "--project", "EpoCaseLaw", "-c", "Release", "--no-build"]
+    }
+  }
+}

@@ -1,0 +1,1114 @@
+<!--****************************************************************************
+* ep-appeal-decision v1.1 June 2018
+********************************************************************************
+* created by: Leo Sarasua; lsarasua@epo.org May 2005
+********************************************************************************
+* revision history:
+* v1.1
+*	-	June 2018 - Jouve
+*	-	Add element ep-ecli
+* v1.0
+*	-	April 2008 - Jouve
+*	-	delete xmlns references
+*	-	November 2007 - Jouve
+*	- 	add lang attributes on ep-headnote, ep-catchword, ep-summary-of-facts, ep-reasons-for-decisions and ep-appeal-order elements
+*	- 	add volume and reference attribute on ep-appeal-bib-data element
+*	- 	add new ep-year-of-case-law element to the ep-appeal-bib-data
+*	- 	add classifications-ipcr level
+*	- 	change elements frequency from mandatory to optional for most ep-appeal-bib-data elements
+* v0.1
+*	- 	May 2005
+*	- 	Initial draft
+********************************************************************************
+-->
+<!ENTITY % name_group  "((name | (prefix?,(last-name | orgname),first-name?,
+               middle-name?,suffix?,iid?,role?,orgname?,department?,synonym*)),
+               registered-number?)" >
+
+<!ENTITY % address_group  "((address-1?,address-2?,address-3?,mailcode?,pobox?,room?,
+               address-floor?,building?,street?,city?,county?,state?,postcode?,
+               country) | text)" >
+
+<!ATTLIST abst-problem
+               id  ID    #IMPLIED  >
+
+<!ATTLIST abst-solution
+               id  ID    #IMPLIED  >
+
+<!ATTLIST abstract
+               id  ID    #IMPLIED 
+               lang  CDATA    #IMPLIED 
+               status  CDATA    #IMPLIED  >
+
+<!ATTLIST addressbook
+               id  ID    #IMPLIED 
+               lang  CDATA    #IMPLIED  >
+
+<!ATTLIST application-reference
+               id  ID    #IMPLIED 
+               appl-type  CDATA    #REQUIRED  >
+
+<!ATTLIST author
+               id  ID    #IMPLIED  >
+
+<!ATTLIST bio-deposit
+               id  ID    #IMPLIED 
+               num  CDATA    #IMPLIED 
+               url  CDATA    #IMPLIED 
+               dnum  CDATA    #IMPLIED  >
+
+<!ATTLIST chem
+               id  ID    #IMPLIED 
+               file  CDATA    #REQUIRED 
+               chem-type  CDATA    #REQUIRED  >
+
+<!ATTLIST chemistry
+               id  ID    #IMPLIED 
+               num  CDATA    #IMPLIED  >
+
+<!ATTLIST class
+               class-type  CDATA    #IMPLIED  >
+
+<!ATTLIST classification-ipcr
+               id  ID    #IMPLIED 
+               sequence  CDATA    #IMPLIED  >
+
+<!ATTLIST crossref
+               idref  IDREF    #REQUIRED  >
+
+<!ATTLIST dl
+               tsize  CDATA    #IMPLIED 
+               compact (compact)   #IMPLIED 
+               id  ID    #IMPLIED  >
+
+<!ATTLIST doc-page
+               id  ID    #IMPLIED 
+               file  CDATA    #REQUIRED 
+               wi  CDATA    #REQUIRED 
+               he  CDATA    #REQUIRED 
+               type (jpg | pdf | tif)   #REQUIRED 
+               alt  CDATA    #IMPLIED 
+               pp  CDATA    #IMPLIED 
+               ppf  CDATA    #IMPLIED 
+               ppl  CDATA    #IMPLIED 
+               ocr  CDATA    #IMPLIED 
+               color (color | bw)   #IMPLIED 
+               orientation (portrait | landscape)  "portrait" >
+
+<!ATTLIST document-id
+               lang  CDATA    #IMPLIED  >
+
+<!ATTLIST dt
+               id  ID    #IMPLIED  >
+
+<!-- Appeal-type is used to store the NAT or EPO type of appeal -->
+<!ATTLIST ep-appeal-decision
+               date-produced  CDATA    #IMPLIED 
+               dtd-version  CDATA    #REQUIRED 
+               lang  CDATA    #REQUIRED 
+               accession-num  CDATA    #REQUIRED 
+               doc-version  CDATA    #IMPLIED 
+               id  ID    #IMPLIED 
+               appeal-type  CDATA    #IMPLIED
+               procedure-lang  CDATA    #IMPLIED  >
+
+<!ATTLIST ep-applicant-address
+               id  ID    #REQUIRED  >
+
+<!--Used with EPO appeals. Possible values: D, G, J, T, V, W.-->
+<!ATTLIST ep-case-num
+               code  CDATA    #IMPLIED  >
+
+<!ATTLIST ep-cited-decision
+               country  CDATA    #REQUIRED 
+               code  CDATA    #IMPLIED  >
+
+<!--Article or Rule. Possible values: A, R-->
+<!ATTLIST ep-legal-ref
+               conv  CDATA    #REQUIRED 
+               type  CDATA    #IMPLIED  >
+
+<!ATTLIST ep-opponent-address
+               id  ID    #REQUIRED  >
+
+<!ATTLIST ep-representative-address
+               id  ID    #IMPLIED 
+               idref  IDREF    #REQUIRED  >
+
+<!ATTLIST fax-image
+               file  CDATA    #REQUIRED  >
+
+<!ATTLIST figref
+               idref  IDREFS    #IMPLIED 
+               num  CDATA    #IMPLIED  >
+
+<!ATTLIST heading
+               level (1 | 2 | 3)   #IMPLIED 
+               id  ID    #IMPLIED  >
+
+<!ATTLIST img
+               id  ID    #IMPLIED 
+               he  CDATA    #REQUIRED 
+               wi  CDATA    #REQUIRED 
+               file  CDATA    #REQUIRED 
+               alt  CDATA    #IMPLIED 
+               img-content (drawing | photograph | character | dna | math | 
+               chemistry | table | program-listing | flow-chart | undefined)  
+               "drawing"
+               img-format (jpg | tif | st33 | st35)   #REQUIRED 
+               orientation (portrait | landscape)  "portrait"
+               inline (yes | no)  "no" >
+
+<!ATTLIST invention-title
+               id  ID    #IMPLIED 
+               lang  CDATA    #IMPLIED  >
+
+<!ATTLIST li
+               id  ID    #IMPLIED 
+               num  CDATA    #IMPLIED  >
+
+<!ATTLIST math
+               class  CDATA    #IMPLIED 
+               style  CDATA    #IMPLIED 
+               id  ID    #IMPLIED 
+               xref  IDREF    #IMPLIED 
+               other  CDATA    #IMPLIED 
+               macros  CDATA    #IMPLIED 
+               mode  CDATA    #IMPLIED 
+               display  CDATA    #IMPLIED 
+               type  CDATA    #IMPLIED 
+               name  CDATA    #IMPLIED 
+               height  CDATA    #IMPLIED 
+               width  CDATA    #IMPLIED 
+               baseline  CDATA    #IMPLIED 
+               overflow (scroll | elide | truncate | scale)  "scroll"
+               
+               altimg  CDATA    #IMPLIED 
+               alttext  CDATA    #IMPLIED  >
+
+<!ATTLIST maths
+               id  ID    #IMPLIED 
+               num  CDATA    #IMPLIED  >
+
+<!ATTLIST name
+               name-type (legal | natural)   #IMPLIED  >
+
+<!ATTLIST nplcit
+               id  ID    #IMPLIED 
+               num  CDATA    #IMPLIED 
+               npl-type  CDATA    #IMPLIED 
+               medium  CDATA    #IMPLIED 
+               file  CDATA    #IMPLIED 
+               url  CDATA    #IMPLIED 
+               lang  CDATA    #IMPLIED  >
+
+<!ATTLIST ol
+               id  ID    #IMPLIED 
+               compact (compact)   #IMPLIED 
+               ol-style  CDATA    #IMPLIED  >
+
+<!ATTLIST p
+               id  ID    #IMPLIED 
+               num  CDATA    #IMPLIED  >
+
+<!ATTLIST patcit
+               id  ID    #IMPLIED 
+               num  CDATA    #IMPLIED 
+               dnum  CDATA    #IMPLIED 
+               dnum-type  CDATA    #IMPLIED 
+               url  CDATA    #IMPLIED 
+               file  CDATA    #IMPLIED  >
+
+<!ATTLIST pre
+               id  ID    #IMPLIED 
+               listing-type (sequence | other | program-listing)   #REQUIRED  >
+
+<!ATTLIST publication-reference
+               id  ID    #IMPLIED  >
+
+<!ATTLIST refno
+               id  ID    #IMPLIED  >
+
+<!ATTLIST subname
+               subname-type (editor | translator | other-subname-type)  "editor"
+                >
+
+<!ATTLIST table-external-doc
+               id  ID    #IMPLIED 
+               file  CDATA    #REQUIRED 
+               lang  CDATA    #IMPLIED 
+               status  CDATA    #IMPLIED 
+               carriers (internal-electronic | external-electronic | paper)  
+                #IMPLIED 
+               external-type (math | chemistry | program-listing | other)  
+                #IMPLIED  >
+
+<!ATTLIST tables
+               id  ID    #IMPLIED 
+               num  CDATA    #IMPLIED  >
+
+<!ATTLIST u
+               style (single | double | dash | dots)  "single" >
+
+<!ATTLIST ul
+               id  ID    #IMPLIED 
+               list-style (bullet | dash | none)  "bullet"
+               compact (compact)   #IMPLIED  >
+
+<!ATTLIST ep-appeal-decisions
+                date-produced CDATA #REQUIRED>
+                
+<!ELEMENT ep-appeal-decisions (ep-appeal-decision*) >
+
+<!ELEMENT ep-appeal-decision  (ep-appeal-bib-data,ep-headword?,ep-legal-refs?,
+               ep-keywords?,ep-keywords-documentation?,ep-cited-decisions?,
+               ep-headnote?,ep-catchword?,ep-summary-of-facts?,
+               ep-reasons-for-decision?,ep-appeal-order?,abstract*) >
+
+
+<!-- volume store the year+ncd value of the LEGAL CD-ROM where the decision was first published -->
+<!-- reference store the ancient publication reference -->
+<!ATTLIST ep-appeal-bib-data
+               volume  CDATA    #REQUIRED 
+               reference CDATA    #IMPLIED >
+
+<!ELEMENT ep-appeal-bib-data  (ep-distribution-code,ep-case-num,
+               ep-board-of-appeal-code,application-reference?,publication-reference?,
+               ep-date-of-decision,ep-ecli,ep-official-journal?,invention-title?,
+               classifications-ipcr?,ep-applicant-addresses?,ep-opponent-addresses?,
+               ep-representative-addresses?,ep-decision-under-appeal?,ep-appeal-board?,
+               ep-registrar?,ep-year-of-case-law?) >
+
+<!ELEMENT ep-headword  (#PCDATA | b | i | u | sup | sub)* >
+
+<!ELEMENT ep-legal-issuer (country)>
+
+<!ELEMENT ep-legal-document (#PCDATA) >
+
+<!ELEMENT ep-legal-document-part (#PCDATA) >
+
+<!ELEMENT ep-legal-text (ep-legal-document, ep-legal-document-part)>
+
+<!ELEMENT ep-legal-ref-presentation (#PCDATA)>
+
+<!ATTLIST ep-legal-citation
+                lang CDATA #IMPLIED >
+                
+<!ELEMENT ep-legal-citation (ep-legal-issuer, ep-legal-text?, date?, ep-legal-ref-presentation)>
+
+<!ELEMENT ep-legal-refs  ((ep-legal-ref*)|(ep-legal-citation+)) >
+
+<!ELEMENT ep-keywords  (keyword+) >
+
+<!ATTLIST ep-keywords
+               lang CDATA    #IMPLIED>
+
+<!-- Remarks -->
+<!ELEMENT ep-keywords-documentation  (keyword+) >
+
+<!ELEMENT ep-cited-decisions  (ep-cited-decision+) >
+
+<!ELEMENT ep-headnote  (heading*,p*)+ >
+
+<!ATTLIST ep-headnote
+               lang CDATA    #IMPLIED>
+               
+<!ELEMENT ep-catchword  (heading*,p*)+ >
+
+<!ATTLIST  ep-catchword
+               lang CDATA    #IMPLIED>
+               
+<!ELEMENT ep-summary-of-facts  (heading*,p+)+ >
+
+<!ATTLIST ep-summary-of-facts
+               lang CDATA    #IMPLIED>
+               
+<!ELEMENT ep-reasons-for-decision  (heading*,p+)+ >
+
+<!ATTLIST ep-reasons-for-decision
+               lang CDATA    #IMPLIED>
+
+<!ELEMENT ep-appeal-order  (heading*,p+)+ >
+
+<!ATTLIST ep-appeal-order
+               lang CDATA    #IMPLIED>
+
+<!--
+*******************************************************************************
+* END FOR COPYING THIS SECTION
+* INTO/FROM ep-patent-document.dtd
+*******************************************************************************
+
+*******************************
+ABSTRACT (SUB-DOCUMENT)
+*******************************
+:
+(INID 57, ST.32:B570)
+ST.32 equivalent SDOAB not used in ST.36
+A concise summary of the disclosure, 50-150 words.
+
+EPO required usage:
+- id="abst"
+- lang
+
+EPO Style: The abstract is published on the title page after
+the INID code (57); the actual heading "Abstract" etc, is NOT printed.
+
+Example:
+<abstract id="abst" lang="de">
+-->
+<!ELEMENT abstract  (doc-page+ | (abst-problem,abst-solution) | p+) >
+
+<!ELEMENT ep-distribution-code  (#PCDATA) >
+
+<!ELEMENT ep-case-num  (country,ep-appeal-num,ep-year) >
+
+<!ELEMENT ep-ecli  (#PCDATA) >
+
+<!ELEMENT ep-board-of-appeal-code  (#PCDATA) >
+
+<!--application reference information: application number, country-->
+<!ELEMENT application-reference  (document-id) >
+
+<!--***
+Publication reference information: publication number, date, etc
+(INID 11, ST.32:B110)
+-->
+<!ELEMENT publication-reference  (document-id) >
+
+<!ELEMENT ep-date-of-decision  (date) >
+
+<!ELEMENT ep-official-journal  (ep-official-journal-num,ep-year,ppf,text?) >
+
+<!--Title of the Invention: preferably two to seven words when in English or translated into English and precise. (Rule 4.3) Recommended id = 'invt'-->
+<!ELEMENT invention-title  (#PCDATA | b | i | u | sup | sub)* >
+
+<!--*******************************
+* IPC DATA - NEW IPC8
+*******************************
+International Patent Classification (IPC) data;
+- to be implemented in 2006
+- use B510 for until week 52, 2005
+- see: http://www.wipo.int/scit/en/standards/pdf/03-08-01.pdf:
+
+Industrial property offices are asked to implement this new version of Standard ST.8 for all patent documents with a publication date from January 1, 2006, onwards. For patent documents published prior to that date, the previous version of the Standard should continue to be used.
+. . .
+This recording convention provides that symbols of the International Patent Classification (IPC) should be
+presented on machine-readable records for the exchange of information in machine-readable form in a fixed-length field in 50 positions, each part of the Int. Cl. symbol being recorded in specific positions and in the manner prescribed.
+- this can be recorded within the <text> tag.
+
+Position(s) Content Values
+
+1 Section A-H
+23 Class 01-99
+4 Subclass A-Z
+5 to 8 Main Group (right aligned) 1-9999, blank
+9 Separating character / ("Slash")
+10 to 15 Subgroup (left aligned) 00-999999 blank
+16 to 19 For future use 4 blanks
+20 to 27 Version indicator YYYYMMDD date format
+28 Classification level C, A, S
+29 First or later position of symbol F, L
+30 Classification value (inventive or non-inventive) I, N
+31 to 38 Action date YYYYMMDD date format
+39 Original or reclassified data BRVD
+40 Source of classification data H M G
+41-42 Generating office AA ZZ (ST.3)
+43-50 For future use 8 blanks
+
+-->
+<!ELEMENT classifications-ipcr (classification-ipcr)+>
+
+<!ELEMENT classification-ipcr  ((section,class,subclass,main-group?,subgroup?,
+               ipc-version-indicator,classification-level?,symbol-position?,
+               classification-value?,action-date?,classification-status?,
+               classification-data-source?,generating-office?) | text) >
+
+<!ELEMENT ep-applicant-addresses  (ep-applicant-address+) >
+
+<!ELEMENT ep-opponent-addresses  (ep-opponent-address+) >
+
+<!ELEMENT ep-representative-addresses  (ep-representative-address+) >
+
+<!ELEMENT ep-decision-under-appeal  (p*) >
+
+<!ELEMENT ep-appeal-board  (ep-board-chairman,ep-board-member+) >
+
+<!ELEMENT ep-registrar  (name,basic-signature?) >
+
+<!-- Year of case law -->
+<!ELEMENT  ep-year-of-case-law (#PCDATA)>
+
+<!--bold formatting for text-->
+<!ELEMENT b  (#PCDATA | i | u | smallcaps)* >
+
+<!--italic formatting for text-->
+<!ELEMENT i  (#PCDATA | b | u | smallcaps)* >
+
+<!--underscore: style - single is default-->
+<!ELEMENT u  (#PCDATA | b | i | smallcaps)* >
+
+<!--superscripted text-->
+<!ELEMENT sup  (#PCDATA | b | u | i | sub2 | sup2)* >
+
+<!--subscripted text-->
+<!ELEMENT sub  (#PCDATA | b | u | i | sub2 | sup2)* >
+
+<!ELEMENT ep-legal-ref  (#PCDATA) >
+
+<!--Keyword; e.g., from a Thesaurus or class. scheme-->
+<!ELEMENT keyword  (#PCDATA) >
+
+<!ELEMENT ep-cited-decision  ((ep-appeal-num,ep-year) | text) >
+
+<!--heading text; see Rule 5. Recommended id = h01, h02, etc.-->
+<!ELEMENT heading  (#PCDATA | b | i | u | sup | sub | smallcaps)* >
+
+<!--paragraph Recommended id = p0001, p0002, etc. num = 0001, 0002, etc.-->
+<!ELEMENT p  (#PCDATA | b | i | u | sup | sub | smallcaps | br | pre | dl | ul | ol | 
+               figref | patcit | nplcit | bio-deposit | crossref | img | chemistry | 
+               maths | tables | table-external-doc)* >
+
+<!--*********************************
+DOC-PAGE
+*********************************
+doc-page - DOCument or PAGE
+
+This is primarily to be used when data for the whole or major sections of an
+application are in image format OR other formats such as pdf.
+Page range attributes are given when required
+pp - page range
+ppf - first page
+ppl - last page (for pdf).
+The 'img' may also be used for complete pages, e.g. in drawings
+
+EPO Required usage:
+- in the EP publication process this tag is only likely to be used for the
+search report; then we use:
+- id="srep0001"
+- file="srep0001.tif"
+
+- in all other cases use:
+- id="docp0001"
+- file="docp0001.tif"
+
+Example:
+<search-report-data id="srep" srep-office="EP" date-produced="20050308">
+<doc-page id="srep0001" file="srep0001.tif" he="231" wi="159" type="tif" />
+<doc-page id="srep0002" file="srep0002.tif" he="231" wi="159" type="tif"/>
+</search-report-data>
+-->
+<!ELEMENT doc-page   EMPTY  >
+
+<!--abst-problem
+The alleged problem that the invention purports to solve
+
+Recommended id="absp"
+
+Unlikely to be used by the EPO
+-->
+<!ELEMENT abst-problem  (p+) >
+
+<!--
+abst-solution
+The solution to the alleged problem that the invention purports to solve.
+
+Recommended id="abss"
+
+Unlikely to be used by the EPO
+-->
+<!ELEMENT abst-solution  (p+) >
+
+<!--Country: use ST.3 country code, e.g. DE, FR, GB, NL, etc. Also includes EP, WO-->
+<!ELEMENT country  (#PCDATA) >
+
+<!ELEMENT ep-appeal-num  (#PCDATA) >
+
+<!ELEMENT ep-year  (#PCDATA) >
+
+<!--Document identification refers to patents (and patent applications) only. See WIPO ST.14-->
+<!ELEMENT document-id  (country,doc-number,kind?,name?,date?) >
+
+<!--Recommended format: YYYYMMDD-->
+<!ELEMENT date  (#PCDATA) >
+
+<!ELEMENT ep-official-journal-num  (#PCDATA) >
+
+<!--cited document page , first-->
+<!ELEMENT ppf  (#PCDATA) >
+
+<!ELEMENT text  (#PCDATA) >
+
+<!--Positions 1 to 19: Recording of the parts of the IPC symbols
+IPC symbols are defined in Part 5 of the WIPO Handbook on
+Industrial Property Information and Documentation and in
+the latest version of the Guide to the IPC.
+-->
+<!ELEMENT section  (#PCDATA) >
+
+<!--In NPL, use this element for a classification code; e.g. ipc, dewey etc. In IPCR, use this for the IPC class symbol.-->
+<!ELEMENT class  (#PCDATA) >
+
+<!ELEMENT subclass  (#PCDATA) >
+
+<!ELEMENT main-group  (#PCDATA) >
+
+<!ELEMENT subgroup  (#PCDATA) >
+
+<!--Positions 20 to 27: Version indicator
+Although in the paper publications a version indicator may contain
+four or six digits, the version indicator in machinereadable
+records contains eight digits, namely YYYYMMDD with Y for year, M for month and D for day.
+-->
+<!ELEMENT ipc-version-indicator  (date) >
+
+<!--Position 28 : Classification level
+Offices are expected to classify each subject matter only in one level (core or advanced). However, both levels need to
+be completely represented in the master classification database and thus a level indicator is needed. The level indicator
+is also useful for indicating situations where an office does not classify in either the core or the advanced level
+classification, i.e., when an office only assigns classifications to the subclass level. The level indicator enables to make the difference between core, advanced and subclass levels. The letters C (Core), A (Advanced) and S (Subclass) are
+used for this one-digit field.
+
+Levels: ipcr-advanced, ipcr-core
+-->
+<!ELEMENT classification-level  (#PCDATA) >
+
+<!--Position 29: First or later position of symbols
+The position of the first invention information classification
+can be recognized by this field. The letters F and L are used
+for first and later position, respectively.
+-->
+<!ELEMENT symbol-position  (#PCDATA) >
+
+<!--Position 30: Classification value (inventive or non-inventive)
+The difference between invention information and other information
+is important for the retrieval of the information. The
+letters I and N are used for the invention and non-invention
+information, respectively.
+-->
+<!ELEMENT classification-value  (#PCDATA) >
+
+<!--Positions 31-38: Action date
+The date of assigning the classification symbol (action date)
+is represented by eight digits, namely YYYYMMDD. This
+date can be used to check if a classification needs to be
+reviewed after revision of the scheme, e.g., in case of creating
+new subdivisions.
+-->
+<!ELEMENT action-date  (date) >
+
+<!--Position 39: Original and reclassified data
+Original data is the first data assigned to the document.
+In case of a publishing office assigning classification symbols at
+the core level, another office may also assign symbols at
+the advanced level as original data.
+Reclassified data is data changed due to a change in the classification schemes.
+Various data is data changed due to an incidental reclassification
+of an individual document, such as the correction of a mistake.
+Deleted data is data which has to be deleted from the
+Master Classification Database, due to a change in assigning of
+classification symbols to a document.
+
+The indication of the different types of data is marked by the letters B for the basic or original data,
+R for reclassified data, V for various incidental changes, and D for data to be deleted.
+Possible status: original-classification, reclassified, various-classification, deleted-classification
+-->
+<!ELEMENT classification-status  (#PCDATA) >
+
+<!--Position 40: Source of classification data
+The following sources of classification data are foreseen:
+- Intellectual classification by persons,
+value H for human generated data.
+- Machine classification by the propagation of earlier
+intellectual classification through the use of common
+priorities in the patent application.
+The value M is used in this case and will facilitate later corrections.
+- Classification symbols generated by software using automatic
+analysis of the content of the patent document.
+The letter G is used to indicate this source of generated data.
+-->
+<!ELEMENT classification-data-source  (#PCDATA) >
+
+<!--Positions 41-42: Generating Office
+Since part of the original data in the advanced level and
+the reclassified data can be delivered by offices other than the
+publishing office, the information source of such data is
+recorded by a field of two characters. The country or office
+code CC, as defined by WIPO Standard ST.3, must be used.
+-->
+<!ELEMENT generating-office  (country) >
+
+<!ELEMENT ep-applicant-address  (addressbook) >
+
+<!ELEMENT ep-opponent-address  (addressbook) >
+
+<!ELEMENT ep-representative-address  (addressbook) >
+
+<!ELEMENT ep-board-chairman  (name,basic-signature?) >
+
+<!ELEMENT ep-board-member  (name) >
+
+<!--name: if no distinction or detail can be given. Also to be used for: personal (natural person) and corporate (legal entity) names-->
+<!ELEMENT name  (#PCDATA) >
+
+<!--A non-PKI electronic signature
+-->
+<!ELEMENT basic-signature  (fax-image | text-string | click-wrap) >
+
+<!--small capitals-->
+<!ELEMENT smallcaps  (#PCDATA | b | u | i)* >
+
+<!---->
+<!ELEMENT sub2  (#PCDATA | b | u | i)* >
+
+<!---->
+<!ELEMENT sup2  (#PCDATA | b | u | i)* >
+
+<!--br - break, line break within a paragraph-->
+<!ELEMENT br   EMPTY  >
+
+<!--This element is one method to identify content consisting of text objects that require preservation (pre) of their whitespace in order to preserve internal logical relationships. (e.g., sequence listing fragments, computer program listings)-->
+<!ELEMENT pre  (#PCDATA) >
+
+<!--definition list Recommended id = dlis01, dlis02, etc.-->
+<!ELEMENT dl  (dt,dd)+ >
+
+<!--stopped here; kr/31.05.04, 11:00 Unordered Lists list-style may be empty for lists with no bullet or other symbol default list-style is 'bullets' Recommended id = ulis01, ulis02, etc.-->
+<!ELEMENT ul  (li+) >
+
+<!--Ordered Lists: attribute 'ol-style' - recommded use: ... 1 arabic numbers 1, 2, 3, ... a lower alpha a, b, c, ... A upper alpha A, B, C, ... i lower roman i, ii, iii, ... I upper roman I, II, III, ...-->
+<!ELEMENT ol  (li+) >
+
+<!--a reference to a figure; e.g., "...as shown in figure 1..."-->
+<!ELEMENT figref  (#PCDATA | b | i | u | sup | sub | smallcaps)* >
+
+<!--PATENT CITATIONS: Patent Citation within abstract, description or claims. For patent citations within Search Report see Search Report DTD Notes: Tags arranged according to WIPO ST.14 order. This can be free text data without any structure (text). Example: US4793675AHanda19881227 Note: it is NOT expected that the applicant will create the tagged data - it could be generated from a 'pull down' data entry form or generated from internal SR databases Attributes (recommended): id - pcit01, pcit02, etc. num - 001, 002, etc. dnum - use full number as one string, eg, "US5401234A"; url - where possible give full web link to patent file - file name eg. if stored on local systems dnum-type - type of document number (e.g., application number, publication number) Attributes: dpn = document page number, ie page where cit. is url = web address-->
+<!ELEMENT patcit  (text | (document-id,rel-passage*)) >
+
+<!--Non-Patent Literature (NPL) CITation; Notes: This can be free text data without any structure (#PCDATA) which is NOT recommended or it can be highly structured data which is marked up according to ST.14 and ISO 690 layout; This part of the DTD has used many different sources for element names and DTD structure and reference: AACR2 / MARC ISO 12083 - Electronic manuscript prep. and markup. DTD Association of American Publishers (AAP) Z39.59 DTD European Working Group for SGML (EWS) MAJOUR DTD SuperJournal Full Article DTD www.superjournal.ac.uk/sj Elsevier DTD Medline DTD (NLM) Attributes (recommended): id - ncit1, ncit2, etc num - 0001, 0002 The TYPE of citation is office specific: (recommended):; A - Abstract citation of no specific kind B - Book citation I - Bilogical abstract citation C - Chemical abstracts citation E - Database citation D - Derwent citation P - Patent cited within NPL group J - Patent Abstracts of Japan citation (REC 067) S - Serial / Journal / Periodical citation W - World Wide Web / Internet search citation medium - the type of medium eg. CD (CD-ROM), MT (Magnetic Tape), DISK, ONLINE file - file name on local systems eg. XP number in EPO url - where possible give full web link to document Attributes: dpn = document page number, ie page where cit. is-->
+<!ELEMENT nplcit  (text | article | book | online | othercit) >
+
+<!--biological deposit citation (US EFS: biological-deposit) According to PCT Rule 13bis, EPC Rule 28 This covers all bio data references long and short within the description and/or claims Recommended id = biod01, biod02, etc.-->
+<!ELEMENT bio-deposit  (depositary,bio-accno,date?,term?,dtext?) >
+
+<!--Cross reference to any other element with an identifier (id)-->
+<!ELEMENT crossref  (#PCDATA | b | i | u | sup | sub | smallcaps)* >
+
+<!--image data image is used for any kind of image: art work, figures, complex work units (math, tables, chemistry), etc. Recommended: id = i01, i02, etc. he, wi = "11" - milimeters - height, width; file = file name,location; label - not used; alt = alternate text if image not shown; img-content = drawing is the default; img-format = common will be tiff, st33 and st35 in for backward compatibilty and, later, publication. orientation = orientation of the image (portrait | landscape). Default is portrait inline = (yes | no). Whether the image is to be presented inline or separated by line breaks. Default is no-->
+<!ELEMENT img   EMPTY  >
+
+<!--chemistry Chemical formulae, ring structures, Markush structures, etc. For now treat as image data. Depending on industry support we may use, e.g., CML later Recommended id = chem01, chem02, etc-->
+<!ELEMENT chemistry  (img | (chem,img?)) >
+
+<!--zee transform
+end of MathML Character Entity section
+Revision History:
+
+Initial draft (syntax = XML) 1997-05-09
+Stephen Buswell
+Revised 1997-05-14
+Robert Miner
+Revised 1997-06-29 and 1997-07-02
+Stephen Buswell
+Revised 1997-12-15
+Stephen Buswell
+Revised 1998-02-08
+Stephen Buswell
+Revised 1998-04-04
+Stephen Buswell
+Entities and small revisions 1999-02-21
+David Carlisle
+Added attribute definitionURL to ci and cn 1999-10-11
+Nico Poppelier
+Additions for MathML 2 1999-12-16
+David Carlisle
+Namespace support 2000-01-14
+David Carlisle
+XHTML Compatibility 2000-02-23
+Murray Altheim
+New content elements 2000-03-26
+David Carlisle
+Further revisions for MathML2 CR draft 2000-07-11
+David Carlisle
+Further revisions for MathML2 CR draft 2000-10-31
+David Carlisle
+
+
+end of MathML 2.0 DTD ................................................
+.......................................................................-->
+<!ELEMENT maths  (img | (math,img?)) >
+
+<!--TABLES This is image data or coded according to OASIS Exchange model with modified cell 'entry' content Recommended id = tabl01, tabl02, etc.-->
+<!ELEMENT tables  (img | table) >
+
+<!---->
+<!ELEMENT table-external-doc  (#PCDATA) >
+
+<!--the number of the referenced patent (or application) document-->
+<!ELEMENT doc-number  (#PCDATA) >
+
+<!--document kind code; e.g. A1-->
+<!ELEMENT kind  (#PCDATA) >
+
+<!--ADDRESSBOOK GROUP: Holds name and contact information for individuals/organizations The LANG attribute is REQUIRED for certain document types, e.g. the JPO PCT Request where names and addresses may be repeated in two different languages. If no structure possible use text.-->
+<!ELEMENT addressbook  ((%name_group;,address,phone*,fax*,email*,url*,ead*,dtext?) | 
+               text) >
+
+<!--A TIFF image of a signature
+-->
+<!ELEMENT fax-image   EMPTY  >
+
+<!--A simple text string is to be used as the basic electronic signature;
+e.g., John Doe <text-string>/jd/</text-string>
+-->
+<!ELEMENT text-string  (#PCDATA) >
+
+<!--A simple 'signature';
+e.g., clicking a button labeled 'accept' or 'I agree'
+-->
+<!ELEMENT click-wrap   EMPTY  >
+
+<!--term to be defined; Recommended id = dtrm01, dtrm02, etc.-->
+<!ELEMENT dt  (#PCDATA | b | i | u | sup | sub | smallcaps)* >
+
+<!ELEMENT dd  (#PCDATA | b | i | u | sup | sub | smallcaps | br | pre | patcit | 
+               nplcit | bio-deposit | crossref | figref | img | ul | ol | chemistry | 
+               maths)* >
+
+<!--list item Recommended id = list01, list02, etc.-->
+<!ELEMENT li  (#PCDATA | b | i | u | sup | sub | smallcaps | br | pre | patcit | 
+               nplcit | bio-deposit | crossref | figref | img | dl | ul | ol | 
+               chemistry | maths)* >
+
+<!--Relevant passage group within patent; most used in search reports - use text in abstract, description and claims-->
+<!ELEMENT rel-passage  (text | (passage+,category*,rel-claims*)+) >
+
+<!--article citations within a 'host' document After patent citations the most common citations are articles within serials (periodicals, magazines), books and electronic (eg. internet) sources. This is a very complex and varied area to standardise. The tag set below is drawn from a number of sources as is the order of the tags (which in any case can be changed depending on the stylesheet used).; The order of tags is that of WIPO ST.14 / ISO 690 layout DROP, J.G. Integrated Circuit Personalization at the Module Level. IBM Tech. Dis. Bull. October 1974, Vol. 17, No. 5, p. 1344 and 1345. [XPnnnnnnnnnnn]. DROP, J.G.Integrated Circuit Personalization at the Module LevelIBM Tech. Dis. Bull.197410001751344 and 1345XP1234456 Note: it is NOT expected that the applicant will create the tagged data - it can be generated from a 'pull down' data entry form (eg. in Word) or generated from internal SR databases-->
+<!ELEMENT article  (text | (author*,atl?,subname*,(serial | book),absno?,location?,
+               class*,keyword*,cpyrt?,artid?,refno*)) >
+
+<!--book citation In the order specified by WIPO ST.14 and ISO 690 and AACR2 rules for layout WALTON, Herrmann. Microwave quantum theory. London : Sweet and Maxwell, 1973. ISBN 0123456789. Vol.2, p. 138 to 192. WALTON, HerrmanMicrowave quantum theoryLondonSweet and Maxwell19730000138 to 1920-1234-568-9-->
+<!ELEMENT book  (text | (author*,(book-title+ | conference),(subtitle?,subname*,
+               edition?,imprint?,descrip?,series?,absno?,location*,isbn*,pubid?,vid?,
+               bookno?,notes?,class*,keyword*,cpyrt?,refno*))) >
+
+<!--online citation Revised according to ISO-690-2 - Electronic documents and parts thereof. Please refer to this standard for definitions and examples. See: http://www.nlc-bnc.ca/iso/tc46sc9/standard/690-2e.htm#Contents The tagging in fact is a mixture of article and book tags together with specific electronic source tags 'Online' is taken to mean any kind of electronic documentation: databases, internet, CD-Roms, DVD, email, etc EXAMPLES:; Kirk-Othmer Encyclopedia of Chemical Technology [online]. 3rd ed. New York : John Wiley, 1984 [cited 3 January 1990]. Available from: DIALOG Information Services, Palo Alto (Calif.). Kirk-Othmer Encyclopedia of Chemical Technology 3rd ed.New YorkJohn Wiley19840000dialog information services, palo alto (calif.).19900103 * Article on Internet: Clark, Carol. On the Threshold of a Brave New World. In Blueprint of the Body [online]. CNN.com, 2000. [cited 24 August 2000; 10:25 EST]. In-depth specials. Available from: [http://www.cnn.com/SPECIALS/2000/genome/story/overview/] Clark, CarolOn the Threshold of a Brave New WorldCNN.com, 2000In-depth specialshttp://www.cnn.com/SPECIALS/2000/genome/story/20000824; 10:25 est * Personal communication (e-mail) Thacker, Jane. MPEG-21 project stream on digital item identification [online]. Message to: [iso.tc46.sc9@nlc-bnc.ca]. 3 October 2000; 13:33 EST [cited 6 October 2000; 13:10 EST]. Message-ID: [002f01c02d60$051a64a0$22a2580c@vaio]. Personal communication. Thacker, JaneMPEG-21 project stream on digital item identification Message to: iso.tc46.sc9@nlc-bnc.ca 3 October 2000; 13:33 ESTPersonal communicationMessage-ID: 002f01c02d60$051a64a0$22a2580c@vaio 6 october 2000; 13:10 EST-->
+<!ELEMENT online  (text | (author*,online-title*,hosttitle?,subname*,edition?,(
+               serial | book)?,imprint?,pubdate?,history?,series?,hostno?,location?,
+               notes?,avail,class*,keyword*,cpyrt?,issn?,isbn?,datecit?,srchterm*,
+               srchdate?,refno*)) >
+
+<!--other citations - free form-->
+<!ELEMENT othercit  (#PCDATA | b | i | u | sup | sub)* >
+
+<!--information regarding the facility storing the biological deposit-->
+<!ELEMENT depositary  (#PCDATA | address)* >
+
+<!--biological accession number: the identification assigned to the biological material by the depository-->
+<!ELEMENT bio-accno  (#PCDATA) >
+
+<!--identifies the period of time during which the depository must be able to furnish samples of the biological material.-->
+<!ELEMENT term  (#PCDATA) >
+
+<!--Descriptive text-->
+<!ELEMENT dtext  (#PCDATA) >
+
+<!---->
+<!ELEMENT chem   EMPTY  >
+
+<!--.............................................................
+The top-level element "math" contains MathML encoded
+mathematics. The "math" element has the browser info
+attributes iff it is also the browser interface element.
+-->
+<!ELEMENT math   EMPTY  >
+
+<!--ELEMENT math (#PCDATA)
+-->
+<!ELEMENT table  (#PCDATA) >
+
+<!--address components: Address formats differ from country to country. If no structure possible use text-->
+<!ELEMENT address  %address_group; >
+
+<!--telephone number-->
+<!ELEMENT phone  (#PCDATA) >
+
+<!--a TIFF image of a signature-->
+<!ELEMENT fax  (#PCDATA) >
+
+<!--email address-->
+<!ELEMENT email  (#PCDATA) >
+
+<!--Universal Resource Locator; e.g. www.wipo.int-->
+<!ELEMENT url  (#PCDATA) >
+
+<!--Electronic addresses other than email-->
+<!ELEMENT ead  (#PCDATA) >
+
+<!--passage within the cited patent literature-->
+<!ELEMENT passage  (#PCDATA) >
+
+<!---->
+<!ELEMENT category  (#PCDATA) >
+
+<!--Claims to which cited document is relevant. ST.32 equivalent = B564-->
+<!ELEMENT rel-claims  (#PCDATA) >
+
+<!--author Prime responsibility for the work there is no distinguishing between personal and corporate authors author element followed by name or addressbook information use the ID attribute if, for example, there is a need to distinguish between multiple authors. Can also include affiliation details Recommended id = auth01, auth02, etc.-->
+<!ELEMENT author  (%name_group; | addressbook) >
+
+<!--article title-->
+<!ELEMENT atl  (#PCDATA) >
+
+<!--Subordinate responsibility, e.g. editor, translator, etc.-->
+<!ELEMENT subname  (%name_group; | addressbook) >
+
+<!--serial citation data: this describes the volume or issue as a whole and not a particular article within it.-->
+<!ELEMENT serial  (sertitle,alttitle?,subname*,issue?,imprint?,pubdate?,descrip?,
+               notes?,issn?,isbn?,pubid?,vid?,ino?,cpyrt?) >
+
+<!--Abstract number-->
+<!ELEMENT absno  (#PCDATA) >
+
+<!--location within the cited work-->
+<!ELEMENT location  (text | (serpart?,sersect?,chapter?,pp?,column?,para?,line?)) >
+
+<!--copyright info. Copyright of publisher of serial-->
+<!ELEMENT cpyrt  (#PCDATA) >
+
+<!--Article unique ID - assigned by a publisher to an article-->
+<!ELEMENT artid  (#PCDATA) >
+
+<!--Reference number (general); for the EPO this is the XP number-->
+<!ELEMENT refno  (#PCDATA) >
+
+<!--the title of the cited book-->
+<!ELEMENT book-title  (#PCDATA) >
+
+<!--CONFERENCE GROUP / CITATION There is no standard way of citing conference proceedings; date of the conf. may come before or after place, for example. The tags are specified in a set order where it is not possible or correct then simply use text-->
+<!ELEMENT conference  (text | (conftitle,date?,confno?,confplace?,confsponsor*)) >
+
+<!--book subtitle-->
+<!ELEMENT subtitle  (#PCDATA) >
+
+<!--edition statement-->
+<!ELEMENT edition  (#PCDATA) >
+
+<!--imprint: Publication / creation data Place of publication : publisher, date(s) of publication usually only date of publication is used for journal citations-->
+<!ELEMENT imprint  (text | (address?,name,pubdate*)) >
+
+<!--Physical description - generally NOT used in citations in pats. eg. v., 27cm-->
+<!ELEMENT descrip  (#PCDATA) >
+
+<!--series statement-->
+<!ELEMENT series  (text | (mst,msn?,issn?)) >
+
+<!--International standard book number-->
+<!ELEMENT isbn  (#PCDATA) >
+
+<!--Publisher's unique id-->
+<!ELEMENT pubid  (#PCDATA) >
+
+<!--Volume id/number-->
+<!ELEMENT vid  (#PCDATA) >
+
+<!--book number-->
+<!ELEMENT bookno  (#PCDATA) >
+
+<!--notes about the journal; e.g. Continues Journal of XYZ 1910-1998, published in French and English, etc.-->
+<!ELEMENT notes  (#PCDATA) >
+
+<!--the title of the electronic resource-->
+<!ELEMENT online-title  (#PCDATA) >
+
+<!--title of the host document/database-->
+<!ELEMENT hosttitle  (#PCDATA) >
+
+<!--publication date used in npl citations-->
+<!ELEMENT pubdate  (#PCDATA | sdate | edate | time)* >
+
+<!--history of the article (not serial)-->
+<!ELEMENT history  (text | (received | accepted | revised | misc)) >
+
+<!--numeration within host document-->
+<!ELEMENT hostno  (#PCDATA) >
+
+<!--Availability and access - REQUIRED use for URL, online database, ftp address, email, etc.; e.g. Available from Internet: http://www.epo.org Available from DIALOG Information Systems, Palo Alto (Calif.)-->
+<!ELEMENT avail  (#PCDATA) >
+
+<!--International standard serial number-->
+<!ELEMENT issn  (#PCDATA) >
+
+<!--date cited - date on which the citation was cited. May be different from srchdate below-->
+<!ELEMENT datecit  (date) >
+
+<!--Search terms-->
+<!ELEMENT srchterm  (#PCDATA) >
+
+<!--Date of search/retrieval YYYYMMDD-->
+<!ELEMENT srchdate  (date) >
+
+<!--title: e.g., Mr., Mrs., Dr., Lord etc-->
+<!ELEMENT prefix  (#PCDATA) >
+
+<!--last, family, surname-->
+<!ELEMENT last-name  (#PCDATA) >
+
+<!--organisation name or company name-->
+<!ELEMENT orgname  (#PCDATA) >
+
+<!--First or given name(s), initial(s)-->
+<!ELEMENT first-name  (#PCDATA) >
+
+<!--middle name(s) or initial(s)-->
+<!ELEMENT middle-name  (#PCDATA) >
+
+<!--name suffix (e.g., II, Jr., Dip., Ing., BA, etc.)-->
+<!ELEMENT suffix  (#PCDATA) >
+
+<!--individual id-->
+<!ELEMENT iid  (#PCDATA) >
+
+<!--role, e.g. President, Chairman, etc.-->
+<!ELEMENT role  (#PCDATA) >
+
+<!--department, division, section, etc. name-->
+<!ELEMENT department  (#PCDATA) >
+
+<!--synonym-->
+<!ELEMENT synonym  (#PCDATA) >
+
+<!--registered number-->
+<!ELEMENT registered-number  (#PCDATA) >
+
+<!--serial title-->
+<!ELEMENT sertitle  (#PCDATA) >
+
+<!--Alternate title for serial eg. BMJ = British Medical Journal-->
+<!ELEMENT alttitle  (#PCDATA) >
+
+<!--issue designation; e.g.: Annual, 1971-, 1890-1972-->
+<!ELEMENT issue  (#PCDATA) >
+
+<!--issue number-->
+<!ELEMENT ino  (#PCDATA) >
+
+<!--part within a serial-->
+<!ELEMENT serpart  (#PCDATA) >
+
+<!--serial section-->
+<!ELEMENT sersect  (#PCDATA) >
+
+<!--chapter, e.g., in a book. Example: Chapter 2-->
+<!ELEMENT chapter  (#PCDATA) >
+
+<!--cited document page numbers-->
+<!ELEMENT pp  (#PCDATA | ppf | ppl)* >
+
+<!--cited document column numbers-->
+<!ELEMENT column  (#PCDATA | colf | coll)* >
+
+<!--referenced paragraph within cited work-->
+<!ELEMENT para  (#PCDATA | paraf | paral)* >
+
+<!--referenced line within cited work-->
+<!ELEMENT line  (#PCDATA | linef | linel)* >
+
+<!--Conference title-->
+<!ELEMENT conftitle  (#PCDATA) >
+
+<!--Conference number-->
+<!ELEMENT confno  (#PCDATA) >
+
+<!--Conference place-->
+<!ELEMENT confplace  (#PCDATA | address)* >
+
+<!--Conference sponsor-->
+<!ELEMENT confsponsor  (#PCDATA | addressbook)* >
+
+<!--monographic series title-->
+<!ELEMENT mst  (#PCDATA) >
+
+<!--monographic series number-->
+<!ELEMENT msn  (#PCDATA) >
+
+<!--start date used in pubdate-->
+<!ELEMENT sdate  (#PCDATA) >
+
+<!--end date used in pubdate-->
+<!ELEMENT edate  (#PCDATA) >
+
+<!--time; format HHMM-->
+<!ELEMENT time  (#PCDATA) >
+
+<!--date article was received-->
+<!ELEMENT received  (date) >
+
+<!--date article was accepted-->
+<!ELEMENT accepted  (date) >
+
+<!--date article was revised-->
+<!ELEMENT revised  (date) >
+
+<!--miscellaneous information relating to the history of the article; see ISO 12083-->
+<!ELEMENT misc  (#PCDATA | date)* >
+
+<!--Address, first line-->
+<!ELEMENT address-1  (#PCDATA) >
+
+<!--Address, second line-->
+<!ELEMENT address-2  (#PCDATA) >
+
+<!--Address, third line-->
+<!ELEMENT address-3  (#PCDATA) >
+
+<!--organizational mail code-->
+<!ELEMENT mailcode  (#PCDATA) >
+
+<!--Post Office Box number-->
+<!ELEMENT pobox  (#PCDATA) >
+
+<!--address room; e.g., Room 55B-->
+<!ELEMENT room  (#PCDATA) >
+
+<!--address floor, e.g., 10th-->
+<!ELEMENT address-floor  (#PCDATA) >
+
+<!--building information in address, e.g., Hoffman building-->
+<!ELEMENT building  (#PCDATA) >
+
+<!--street may contain house number or name-->
+<!ELEMENT street  (#PCDATA) >
+
+<!---->
+<!ELEMENT city  (#PCDATA) >
+
+<!--County, parish, department, etc (mainly UK, USA)-->
+<!ELEMENT county  (#PCDATA) >
+
+<!--Region of country eg. state, province, etc.-->
+<!ELEMENT state  (#PCDATA) >
+
+<!--postal code or zip code-->
+<!ELEMENT postcode  (#PCDATA) >
+
+<!--cited document page, last-->
+<!ELEMENT ppl  (#PCDATA) >
+
+<!--cited document column, first-->
+<!ELEMENT colf  (#PCDATA) >
+
+<!--cited document column, last-->
+<!ELEMENT coll  (#PCDATA) >
+
+<!--cited paragraph, first-->
+<!ELEMENT paraf  (#PCDATA) >
+
+<!--cited paragraph, last-->
+<!ELEMENT paral  (#PCDATA) >
+
+<!--cited document line, first-->
+<!ELEMENT linef  (#PCDATA) >
+
+<!--cited document line, last-->
+<!ELEMENT linel  (#PCDATA) >

@@ -1,0 +1,12 @@
+epo.db*
+EPDecisions_*.xml
+*.pdf
+embed.log
+models/
+native/
+bin/
+obj/
+publish/
+.DS_Store
+*.user
+*.suo

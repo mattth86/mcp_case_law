@@ -1,0 +1,2088 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--****************************************************************************
+* ep-appeal-decision v1.1 June 2018
+********************************************************************************
+* created by: Leo Sarasua; lsarasua@epo.org May 2005
+********************************************************************************
+* revision history:
+* v1.1
+*	-	June 2018 - Jouve
+*	-	Add element ep-ecli
+* v1.0
+*	-	April 2008 - Jouve
+*	-	delete xmlns references
+*	-	November 2007 - Jouve
+*	- 	add lang attributes on ep-headnote, ep-catchword, ep-summary-of-facts, ep-reasons-for-decisions and ep-appeal-order elements
+*	- 	add volume and reference attribute on ep-appeal-bib-data element
+*	- 	add new ep-year-of-case-law element to the ep-appeal-bib-data
+*	- 	add classifications-ipcr level
+*	- 	change elements frequency from mandatory to optional for most ep-appeal-bib-data elements
+* v0.1
+*	- 	May 2005
+*	- 	Initial draft
+********************************************************************************
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink" elementFormDefault="qualified">
+	<xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlink.xsd"/>
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+	<xs:group name="name_group">
+		<xs:sequence>
+			<xs:choice>
+				<xs:element ref="name"/>
+				<xs:sequence>
+					<xs:element ref="prefix" minOccurs="0"/>
+					<xs:choice>
+						<xs:element ref="last-name"/>
+						<xs:element ref="orgname"/>
+					</xs:choice>
+					<xs:element ref="first-name" minOccurs="0"/>
+					<xs:element ref="middle-name" minOccurs="0"/>
+					<xs:element ref="suffix" minOccurs="0"/>
+					<xs:element ref="iid" minOccurs="0"/>
+					<xs:element ref="role" minOccurs="0"/>
+					<xs:element ref="orgname" minOccurs="0"/>
+					<xs:element ref="department" minOccurs="0"/>
+					<xs:element ref="synonym" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:choice>
+			<xs:element ref="registered-number" minOccurs="0"/>
+		</xs:sequence>
+	</xs:group>
+	<xs:complexType name="address_group">
+		<xs:choice>
+			<xs:sequence>
+				<xs:element ref="address-1" minOccurs="0"/>
+				<xs:element ref="address-2" minOccurs="0"/>
+				<xs:element ref="address-3" minOccurs="0"/>
+				<xs:element ref="mailcode" minOccurs="0"/>
+				<xs:element ref="pobox" minOccurs="0"/>
+				<xs:element ref="room" minOccurs="0"/>
+				<xs:element ref="address-floor" minOccurs="0"/>
+				<xs:element ref="building" minOccurs="0"/>
+				<xs:element ref="street" minOccurs="0"/>
+				<xs:element ref="city" minOccurs="0"/>
+				<xs:element ref="county" minOccurs="0"/>
+				<xs:element ref="state" minOccurs="0"/>
+				<xs:element ref="postcode" minOccurs="0"/>
+				<xs:element ref="country"/>
+			</xs:sequence>
+			<xs:element ref="text"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:attributeGroup name="abst-problem_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="abst-solution_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="abstract_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="lang"/>
+		<xs:attribute name="status"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="addressbook_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="lang"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="application-reference_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="appl-type" use="required"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="author_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="bio-deposit_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="num"/>
+		<xs:attribute name="url"/>
+		<xs:attribute name="dnum"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="chem_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="file" use="required"/>
+		<xs:attribute name="chem-type" use="required"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="chemistry_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="num"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="class_attlist">
+		<xs:attribute name="class-type"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="classification-ipcr_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="sequence"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="crossref_attlist">
+		<xs:attribute name="idref" type="xs:IDREF" use="required"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="dl_attlist">
+		<xs:attribute name="tsize"/>
+		<xs:attribute name="compact">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="compact"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="id" type="xs:ID"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="doc-page_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="file" use="required"/>
+		<xs:attribute name="wi" use="required"/>
+		<xs:attribute name="he" use="required"/>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="jpg"/>
+					<xs:enumeration value="pdf"/>
+					<xs:enumeration value="tif"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="alt"/>
+		<xs:attribute name="pp"/>
+		<xs:attribute name="ppf"/>
+		<xs:attribute name="ppl"/>
+		<xs:attribute name="ocr"/>
+		<xs:attribute name="color">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="color"/>
+					<xs:enumeration value="bw"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="orientation" default="portrait">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="portrait"/>
+					<xs:enumeration value="landscape"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="document-id_attlist">
+		<xs:attribute name="lang"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="dt_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+	</xs:attributeGroup>
+	<!-- Appeal-type is used to store the NAT or EPO type of appeal -->
+	<xs:attributeGroup name="ep-appeal-decision_attlist">
+		<xs:attribute name="date-produced"/>
+		<xs:attribute name="dtd-version" use="required"/>
+		<xs:attribute name="lang" use="required"/>
+		<xs:attribute name="accession-num" use="required"/>
+		<xs:attribute name="doc-version"/>
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="appeal-type"/>
+		<xs:attribute name="procedure-lang"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="ep-applicant-address_attlist">
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+	</xs:attributeGroup>
+	<!-- Used with EPO appeals. Possible values: D, G, J, T, V, W. -->
+	<xs:attributeGroup name="ep-case-num_attlist">
+		<xs:attribute name="code"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="ep-cited-decision_attlist">
+		<xs:attribute name="country" use="required"/>
+		<xs:attribute name="code"/>
+	</xs:attributeGroup>
+	<!-- Article or Rule. Possible values: A, R -->
+	<xs:attributeGroup name="ep-legal-ref_attlist">
+		<xs:attribute name="conv" use="required"/>
+		<xs:attribute name="type"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="ep-opponent-address_attlist">
+		<xs:attribute name="id" type="xs:ID" use="required"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="ep-representative-address_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="idref" type="xs:IDREF" use="required"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="fax-image_attlist">
+		<xs:attribute name="file" use="required"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="figref_attlist">
+		<xs:attribute name="idref" type="xs:IDREFS"/>
+		<xs:attribute name="num"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="heading_attlist">
+		<xs:attribute name="level">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="1"/>
+					<xs:enumeration value="2"/>
+					<xs:enumeration value="3"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="id" type="xs:ID"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="img_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="he" use="required"/>
+		<xs:attribute name="wi" use="required"/>
+		<xs:attribute name="file" use="required"/>
+		<xs:attribute name="alt"/>
+		<xs:attribute name="img-content" default="drawing">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="drawing"/>
+					<xs:enumeration value="photograph"/>
+					<xs:enumeration value="character"/>
+					<xs:enumeration value="dna"/>
+					<xs:enumeration value="math"/>
+					<xs:enumeration value="chemistry"/>
+					<xs:enumeration value="table"/>
+					<xs:enumeration value="program-listing"/>
+					<xs:enumeration value="flow-chart"/>
+					<xs:enumeration value="undefined"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="img-format" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="jpg"/>
+					<xs:enumeration value="tif"/>
+					<xs:enumeration value="st33"/>
+					<xs:enumeration value="st35"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="orientation" default="portrait">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="portrait"/>
+					<xs:enumeration value="landscape"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="inline" default="no">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="yes"/>
+					<xs:enumeration value="no"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="invention-title_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="lang"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="li_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="num"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="math_attlist">
+		<!-- <xs:attribute ref="xlink:href"/>-->
+		<xs:attribute name="class"/>
+		<xs:attribute name="style"/>
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="xref" type="xs:IDREF"/>
+		<xs:attribute name="other"/>
+		<xs:attribute name="macros"/>
+		<xs:attribute name="mode"/>
+		<xs:attribute name="display"/>
+		<xs:attribute name="type"/>
+		<xs:attribute name="name"/>
+		<xs:attribute name="height"/>
+		<xs:attribute name="width"/>
+		<xs:attribute name="baseline"/>
+		<xs:attribute name="overflow" default="scroll">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="scroll"/>
+					<xs:enumeration value="elide"/>
+					<xs:enumeration value="truncate"/>
+					<xs:enumeration value="scale"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="altimg"/>
+		<xs:attribute name="alttext"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="maths_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="num"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="name_attlist">
+		<xs:attribute name="name-type">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="legal"/>
+					<xs:enumeration value="natural"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="nplcit_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="num"/>
+		<xs:attribute name="npl-type"/>
+		<xs:attribute name="medium"/>
+		<xs:attribute name="file"/>
+		<xs:attribute name="url"/>
+		<xs:attribute name="lang"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="ol_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="compact">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="compact"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ol-style"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="p_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="num"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="patcit_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="num"/>
+		<xs:attribute name="dnum"/>
+		<xs:attribute name="dnum-type"/>
+		<xs:attribute name="url"/>
+		<xs:attribute name="file"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="pre_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<!-- <xs:attribute ref="xml:space" default="preserve"/>-->
+		<xs:attribute name="listing-type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="sequence"/>
+					<xs:enumeration value="other"/>
+					<xs:enumeration value="program-listing"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="publication-reference_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="refno_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="subname_attlist">
+		<xs:attribute name="subname-type" default="editor">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="editor"/>
+					<xs:enumeration value="translator"/>
+					<xs:enumeration value="other-subname-type"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="table-external-doc_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="file" use="required"/>
+		<xs:attribute name="lang"/>
+		<xs:attribute name="status"/>
+		<xs:attribute name="carriers">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="internal-electronic"/>
+					<xs:enumeration value="external-electronic"/>
+					<xs:enumeration value="paper"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="external-type">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="math"/>
+					<xs:enumeration value="chemistry"/>
+					<xs:enumeration value="program-listing"/>
+					<xs:enumeration value="other"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="tables_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="num"/>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="u_attlist">
+		<xs:attribute name="style" default="single">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="single"/>
+					<xs:enumeration value="double"/>
+					<xs:enumeration value="dash"/>
+					<xs:enumeration value="dots"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="ul_attlist">
+		<xs:attribute name="id" type="xs:ID"/>
+		<xs:attribute name="list-style" default="bullet">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="bullet"/>
+					<xs:enumeration value="dash"/>
+					<xs:enumeration value="none"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="compact">
+			<xs:simpleType>
+				<xs:restriction base="xs:token">
+					<xs:enumeration value="compact"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:attributeGroup>
+	<xs:attributeGroup name="ep-appeal-decisions_attlist">
+		<xs:attribute name="date-produced" use="required"/>
+	</xs:attributeGroup>
+	<xs:element name="ep-appeal-decisions">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ep-appeal-decision" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-appeal-decisions_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-appeal-decision">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ep-appeal-bib-data"/>
+				<xs:element ref="ep-headword" minOccurs="0"/>
+				<xs:element ref="ep-legal-refs" minOccurs="0"/>
+				<xs:element ref="ep-keywords" minOccurs="0"/>
+				<xs:element ref="ep-keywords-documentation" minOccurs="0"/>
+				<xs:element ref="ep-cited-decisions" minOccurs="0"/>
+				<xs:element ref="ep-headnote" minOccurs="0"/>
+				<xs:element ref="ep-catchword" minOccurs="0"/>
+				<xs:element ref="ep-summary-of-facts" minOccurs="0"/>
+				<xs:element ref="ep-reasons-for-decision" minOccurs="0"/>
+				<xs:element ref="ep-appeal-order" minOccurs="0"/>
+				<xs:element ref="abstract" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-appeal-decision_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- volume store the year+ncd value of the LEGAL CD-ROM where the decision was first published -->
+	<!-- reference store the ancient publication reference -->
+	<xs:attributeGroup name="ep-appeal-bib-data_attlist">
+		<xs:attribute name="volume" use="required"/>
+		<xs:attribute name="reference"/>
+	</xs:attributeGroup>
+	<xs:element name="ep-appeal-bib-data">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ep-distribution-code"/>
+				<xs:element ref="ep-case-num"/>
+				<xs:element ref="ep-board-of-appeal-code"/>
+				<xs:element ref="application-reference" minOccurs="0"/>
+				<xs:element ref="publication-reference" minOccurs="0"/>
+				<xs:element ref="ep-date-of-decision"/>
+				<xs:element ref="ep-ecli"/>
+				<xs:element ref="ep-official-journal" minOccurs="0"/>
+				<xs:element ref="invention-title" minOccurs="0"/>
+				<xs:element ref="classifications-ipcr" minOccurs="0"/>
+				<xs:element ref="ep-applicant-addresses" minOccurs="0"/>
+				<xs:element ref="ep-opponent-addresses" minOccurs="0"/>
+				<xs:element ref="ep-representative-addresses" minOccurs="0"/>
+				<xs:element ref="ep-decision-under-appeal" minOccurs="0"/>
+				<xs:element ref="ep-appeal-board" minOccurs="0"/>
+				<xs:element ref="ep-registrar" minOccurs="0"/>
+				<xs:element ref="ep-year-of-case-law" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-appeal-bib-data_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-headword">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="i"/>
+				<xs:element ref="u"/>
+				<xs:element ref="sup"/>
+				<xs:element ref="sub"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-legal-issuer">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="country"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-legal-document" type="xs:string"/>
+	<xs:element name="ep-legal-document-part" type="xs:string"/>
+	<xs:element name="ep-legal-text">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ep-legal-document"/>
+				<xs:element ref="ep-legal-document-part"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-legal-ref-presentation" type="xs:string"/>
+	<xs:attributeGroup name="ep-legal-citation_attlist">
+		<xs:attribute name="lang"/>
+	</xs:attributeGroup>
+	<xs:element name="ep-legal-citation">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ep-legal-issuer"/>
+				<xs:element ref="ep-legal-text" minOccurs="0"/>
+				<xs:element ref="date" minOccurs="0"/>
+				<xs:element ref="ep-legal-ref-presentation"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-legal-citation_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-legal-refs">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="ep-legal-ref" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="ep-legal-citation" maxOccurs="unbounded"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-keywords">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="keyword" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-keywords_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:attributeGroup name="ep-keywords_attlist">
+		<xs:attribute name="lang"/>
+	</xs:attributeGroup>
+	<!-- Remarks -->
+	<xs:element name="ep-keywords-documentation">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="keyword" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-cited-decisions">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ep-cited-decision" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-headnote">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="heading" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="p" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-headnote_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:attributeGroup name="ep-headnote_attlist">
+		<xs:attribute name="lang"/>
+	</xs:attributeGroup>
+	<xs:element name="ep-catchword">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="heading" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="p" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-catchword_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:attributeGroup name="ep-catchword_attlist">
+		<xs:attribute name="lang"/>
+	</xs:attributeGroup>
+	<xs:element name="ep-summary-of-facts">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="heading" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="p" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-summary-of-facts_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:attributeGroup name="ep-summary-of-facts_attlist">
+		<xs:attribute name="lang"/>
+	</xs:attributeGroup>
+	<xs:element name="ep-reasons-for-decision">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="heading" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="p" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-reasons-for-decision_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:attributeGroup name="ep-reasons-for-decision_attlist">
+		<xs:attribute name="lang"/>
+	</xs:attributeGroup>
+	<xs:element name="ep-appeal-order">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="heading" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="p" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-appeal-order_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:attributeGroup name="ep-appeal-order_attlist">
+		<xs:attribute name="lang"/>
+	</xs:attributeGroup>
+	<!--
+    *******************************************************************************
+    * END FOR COPYING THIS SECTION
+    * INTO/FROM ep-patent-document.dtd
+    *******************************************************************************
+    
+    *******************************
+    ABSTRACT (SUB-DOCUMENT)
+    *******************************
+    :
+    (INID 57, ST.32:B570)
+    ST.32 equivalent SDOAB not used in ST.36
+    A concise summary of the disclosure, 50-150 words.
+    
+    EPO required usage:
+    - id="abst"
+    - lang
+    
+    EPO Style: The abstract is published on the title page after
+    the INID code (57); the actual heading "Abstract" etc, is NOT printed.
+    
+    Example:
+    <abstract id="abst" lang="de">
+  -->
+	<xs:element name="abstract">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="doc-page" maxOccurs="unbounded"/>
+				<xs:sequence>
+					<xs:element ref="abst-problem"/>
+					<xs:element ref="abst-solution"/>
+				</xs:sequence>
+				<xs:element ref="p" maxOccurs="unbounded"/>
+			</xs:choice>
+			<xs:attributeGroup ref="abstract_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-distribution-code" type="xs:string"/>
+	<xs:element name="ep-case-num">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="country"/>
+				<xs:element ref="ep-appeal-num"/>
+				<xs:element ref="ep-year"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-case-num_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-ecli" type="xs:string"/>
+	<xs:element name="ep-board-of-appeal-code" type="xs:string"/>
+	<!-- application reference information: application number, country -->
+	<xs:element name="application-reference">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="document-id"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="application-reference_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!--
+    ***
+    Publication reference information: publication number, date, etc
+    (INID 11, ST.32:B110)
+  -->
+	<xs:element name="publication-reference">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="document-id"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="publication-reference_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-date-of-decision">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="date"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-official-journal">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ep-official-journal-num"/>
+				<xs:element ref="ep-year"/>
+				<xs:element ref="ppf"/>
+				<xs:element ref="text" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Title of the Invention: preferably two to seven words when in English or translated into English and precise. (Rule 4.3) Recommended id = 'invt' -->
+	<xs:element name="invention-title">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="i"/>
+				<xs:element ref="u"/>
+				<xs:element ref="sup"/>
+				<xs:element ref="sub"/>
+			</xs:choice>
+			<xs:attributeGroup ref="invention-title_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!--
+    *******************************
+    * IPC DATA - NEW IPC8
+    *******************************
+    International Patent Classification (IPC) data;
+    - to be implemented in 2006
+    - use B510 for until week 52, 2005
+    - see: http://www.wipo.int/scit/en/standards/pdf/03-08-01.pdf:
+    
+    Industrial property offices are asked to implement this new version of Standard ST.8 for all patent documents with a publication date from January 1, 2006, onwards. For patent documents published prior to that date, the previous version of the Standard should continue to be used.
+    . . .
+    This recording convention provides that symbols of the International Patent Classification (IPC) should be
+    presented on machine-readable records for the exchange of information in machine-readable form in a fixed-length field in 50 positions, each part of the Int. Cl. symbol being recorded in specific positions and in the manner prescribed.
+    - this can be recorded within the <text> tag.
+    
+    Position(s) Content Values
+    
+    1 Section A-H
+    23 Class 01-99
+    4 Subclass A-Z
+    5 to 8 Main Group (right aligned) 1-9999, blank
+    9 Separating character / ("Slash")
+    10 to 15 Subgroup (left aligned) 00-999999 blank
+    16 to 19 For future use 4 blanks
+    20 to 27 Version indicator YYYYMMDD date format
+    28 Classification level C, A, S
+    29 First or later position of symbol F, L
+    30 Classification value (inventive or non-inventive) I, N
+    31 to 38 Action date YYYYMMDD date format
+    39 Original or reclassified data BRVD
+    40 Source of classification data H M G
+    41-42 Generating office AA ZZ (ST.3)
+    43-50 For future use 8 blanks
+    
+  -->
+	<xs:element name="classifications-ipcr">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="classification-ipcr" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="classification-ipcr">
+		<xs:complexType>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element ref="section"/>
+					<xs:element ref="class"/>
+					<xs:element ref="subclass"/>
+					<xs:element ref="main-group" minOccurs="0"/>
+					<xs:element ref="subgroup" minOccurs="0"/>
+					<xs:element ref="ipc-version-indicator"/>
+					<xs:element ref="classification-level" minOccurs="0"/>
+					<xs:element ref="symbol-position" minOccurs="0"/>
+					<xs:element ref="classification-value" minOccurs="0"/>
+					<xs:element ref="action-date" minOccurs="0"/>
+					<xs:element ref="classification-status" minOccurs="0"/>
+					<xs:element ref="classification-data-source" minOccurs="0"/>
+					<xs:element ref="generating-office" minOccurs="0"/>
+				</xs:sequence>
+				<xs:element ref="text"/>
+			</xs:choice>
+			<xs:attributeGroup ref="classification-ipcr_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-applicant-addresses">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ep-applicant-address" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-opponent-addresses">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ep-opponent-address" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-representative-addresses">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ep-representative-address" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-decision-under-appeal">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="p" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-appeal-board">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="ep-board-chairman"/>
+				<xs:element ref="ep-board-member" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-registrar">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="name"/>
+				<xs:element ref="basic-signature" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Year of case law -->
+	<xs:element name="ep-year-of-case-law" type="xs:string"/>
+	<!-- bold formatting for text -->
+	<xs:element name="b">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="i"/>
+				<xs:element ref="u"/>
+				<xs:element ref="smallcaps"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- italic formatting for text -->
+	<xs:element name="i">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="u"/>
+				<xs:element ref="smallcaps"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- underscore: style - single is default -->
+	<xs:element name="u">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="i"/>
+				<xs:element ref="smallcaps"/>
+			</xs:choice>
+			<xs:attributeGroup ref="u_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- superscripted text -->
+	<xs:element name="sup">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="u"/>
+				<xs:element ref="i"/>
+				<xs:element ref="sub2"/>
+				<xs:element ref="sup2"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- subscripted text -->
+	<xs:element name="sub">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="u"/>
+				<xs:element ref="i"/>
+				<xs:element ref="sub2"/>
+				<xs:element ref="sup2"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-legal-ref">
+		<xs:complexType mixed="true">
+			<xs:attributeGroup ref="ep-legal-ref_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- Keyword; e.g., from a Thesaurus or class. scheme -->
+	<xs:element name="keyword" type="xs:string"/>
+	<xs:element name="ep-cited-decision">
+		<xs:complexType>
+			<xs:choice>
+				<xs:sequence>
+					<xs:element ref="ep-appeal-num"/>
+					<xs:element ref="ep-year"/>
+				</xs:sequence>
+				<xs:element ref="text"/>
+			</xs:choice>
+			<xs:attributeGroup ref="ep-cited-decision_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- heading text; see Rule 5. Recommended id = h01, h02, etc. -->
+	<xs:element name="heading">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="i"/>
+				<xs:element ref="u"/>
+				<xs:element ref="sup"/>
+				<xs:element ref="sub"/>
+				<xs:element ref="smallcaps"/>
+			</xs:choice>
+			<xs:attributeGroup ref="heading_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- paragraph Recommended id = p0001, p0002, etc. num = 0001, 0002, etc. -->
+	<xs:element name="p">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="i"/>
+				<xs:element ref="u"/>
+				<xs:element ref="sup"/>
+				<xs:element ref="sub"/>
+				<xs:element ref="smallcaps"/>
+				<xs:element ref="br"/>
+				<xs:element ref="pre"/>
+				<xs:element ref="dl"/>
+				<xs:element ref="ul"/>
+				<xs:element ref="ol"/>
+				<xs:element ref="figref"/>
+				<xs:element ref="patcit"/>
+				<xs:element ref="nplcit"/>
+				<xs:element ref="bio-deposit"/>
+				<xs:element ref="crossref"/>
+				<xs:element ref="img"/>
+				<xs:element ref="chemistry"/>
+				<xs:element ref="maths"/>
+				<xs:element ref="tables"/>
+				<xs:element ref="table-external-doc"/>
+			</xs:choice>
+			<xs:attributeGroup ref="p_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!--
+    *********************************
+    DOC-PAGE
+    *********************************
+    doc-page - DOCument or PAGE
+    
+    This is primarily to be used when data for the whole or major sections of an
+    application are in image format OR other formats such as pdf.
+    Page range attributes are given when required
+    pp - page range
+    ppf - first page
+    ppl - last page (for pdf).
+    The 'img' may also be used for complete pages, e.g. in drawings
+    
+    EPO Required usage:
+    - in the EP publication process this tag is only likely to be used for the
+    search report; then we use:
+    - id="srep0001"
+    - file="srep0001.tif"
+    
+    - in all other cases use:
+    - id="docp0001"
+    - file="docp0001.tif"
+    
+    Example:
+    <search-report-data id="srep" srep-office="EP" date-produced="20050308">
+    <doc-page id="srep0001" file="srep0001.tif" he="231" wi="159" type="tif" />
+    <doc-page id="srep0002" file="srep0002.tif" he="231" wi="159" type="tif"/>
+    </search-report-data>
+  -->
+	<xs:element name="doc-page">
+		<xs:complexType>
+			<xs:attributeGroup ref="doc-page_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!--
+    abst-problem
+    The alleged problem that the invention purports to solve
+    
+    Recommended id="absp"
+    
+    Unlikely to be used by the EPO
+  -->
+	<xs:element name="abst-problem">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="p" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="abst-problem_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!--
+    abst-solution
+    The solution to the alleged problem that the invention purports to solve.
+    
+    Recommended id="abss"
+    
+    Unlikely to be used by the EPO
+  -->
+	<xs:element name="abst-solution">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="p" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="abst-solution_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- Country: use ST.3 country code, e.g. DE, FR, GB, NL, etc. Also includes EP, WO -->
+	<xs:element name="country" type="xs:string"/>
+	<xs:element name="ep-appeal-num" type="xs:string"/>
+	<xs:element name="ep-year" type="xs:string"/>
+	<!-- Document identification refers to patents (and patent applications) only. See WIPO ST.14 -->
+	<xs:element name="document-id">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="country"/>
+				<xs:element ref="doc-number"/>
+				<xs:element ref="kind" minOccurs="0"/>
+				<xs:element ref="name" minOccurs="0"/>
+				<xs:element ref="date" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="document-id_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- Recommended format: YYYYMMDD -->
+	<xs:element name="date" type="xs:string"/>
+	<xs:element name="ep-official-journal-num" type="xs:string"/>
+	<!-- cited document page , first -->
+	<xs:element name="ppf" type="xs:string"/>
+	<xs:element name="text" type="xs:string"/>
+	<!--
+    Positions 1 to 19: Recording of the parts of the IPC symbols
+    IPC symbols are defined in Part 5 of the WIPO Handbook on
+    Industrial Property Information and Documentation and in
+    the latest version of the Guide to the IPC.
+  -->
+	<xs:element name="section" type="xs:string"/>
+	<!-- In NPL, use this element for a classification code; e.g. ipc, dewey etc. In IPCR, use this for the IPC class symbol. -->
+	<xs:element name="class">
+		<xs:complexType mixed="true">
+			<xs:attributeGroup ref="class_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="subclass" type="xs:string"/>
+	<xs:element name="main-group" type="xs:string"/>
+	<xs:element name="subgroup" type="xs:string"/>
+	<!--
+    Positions 20 to 27: Version indicator
+    Although in the paper publications a version indicator may contain
+    four or six digits, the version indicator in machinereadable
+    records contains eight digits, namely YYYYMMDD with Y for year, M for month and D for day.
+  -->
+	<xs:element name="ipc-version-indicator">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="date"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--
+    Position 28 : Classification level
+    Offices are expected to classify each subject matter only in one level (core or advanced). However, both levels need to
+    be completely represented in the master classification database and thus a level indicator is needed. The level indicator
+    is also useful for indicating situations where an office does not classify in either the core or the advanced level
+    classification, i.e., when an office only assigns classifications to the subclass level. The level indicator enables to make the difference between core, advanced and subclass levels. The letters C (Core), A (Advanced) and S (Subclass) are
+    used for this one-digit field.
+    
+    Levels: ipcr-advanced, ipcr-core
+  -->
+	<xs:element name="classification-level" type="xs:string"/>
+	<!--
+    Position 29: First or later position of symbols
+    The position of the first invention information classification
+    can be recognized by this field. The letters F and L are used
+    for first and later position, respectively.
+  -->
+	<xs:element name="symbol-position" type="xs:string"/>
+	<!--
+    Position 30: Classification value (inventive or non-inventive)
+    The difference between invention information and other information
+    is important for the retrieval of the information. The
+    letters I and N are used for the invention and non-invention
+    information, respectively.
+  -->
+	<xs:element name="classification-value" type="xs:string"/>
+	<!--
+    Positions 31-38: Action date
+    The date of assigning the classification symbol (action date)
+    is represented by eight digits, namely YYYYMMDD. This
+    date can be used to check if a classification needs to be
+    reviewed after revision of the scheme, e.g., in case of creating
+    new subdivisions.
+  -->
+	<xs:element name="action-date">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="date"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--
+    Position 39: Original and reclassified data
+    Original data is the first data assigned to the document.
+    In case of a publishing office assigning classification symbols at
+    the core level, another office may also assign symbols at
+    the advanced level as original data.
+    Reclassified data is data changed due to a change in the classification schemes.
+    Various data is data changed due to an incidental reclassification
+    of an individual document, such as the correction of a mistake.
+    Deleted data is data which has to be deleted from the
+    Master Classification Database, due to a change in assigning of
+    classification symbols to a document.
+    
+    The indication of the different types of data is marked by the letters B for the basic or original data,
+    R for reclassified data, V for various incidental changes, and D for data to be deleted.
+    Possible status: original-classification, reclassified, various-classification, deleted-classification
+  -->
+	<xs:element name="classification-status" type="xs:string"/>
+	<!--
+    Position 40: Source of classification data
+    The following sources of classification data are foreseen:
+    - Intellectual classification by persons,
+    value H for human generated data.
+    - Machine classification by the propagation of earlier
+    intellectual classification through the use of common
+    priorities in the patent application.
+    The value M is used in this case and will facilitate later corrections.
+    - Classification symbols generated by software using automatic
+    analysis of the content of the patent document.
+    The letter G is used to indicate this source of generated data.
+  -->
+	<xs:element name="classification-data-source" type="xs:string"/>
+	<!--
+    Positions 41-42: Generating Office
+    Since part of the original data in the advanced level and
+    the reclassified data can be delivered by offices other than the
+    publishing office, the information source of such data is
+    recorded by a field of two characters. The country or office
+    code CC, as defined by WIPO Standard ST.3, must be used.
+  -->
+	<xs:element name="generating-office">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="country"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-applicant-address">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="addressbook"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-applicant-address_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-opponent-address">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="addressbook"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-opponent-address_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-representative-address">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="addressbook"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ep-representative-address_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-board-chairman">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="name"/>
+				<xs:element ref="basic-signature" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ep-board-member">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="name"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- name: if no distinction or detail can be given. Also to be used for: personal (natural person) and corporate (legal entity) names -->
+	<xs:element name="name">
+		<xs:complexType mixed="true">
+			<xs:attributeGroup ref="name_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- A non-PKI electronic signature -->
+	<xs:element name="basic-signature">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="fax-image"/>
+				<xs:element ref="text-string"/>
+				<xs:element ref="click-wrap"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- small capitals -->
+	<xs:element name="smallcaps">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="u"/>
+				<xs:element ref="i"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!---->
+	<xs:element name="sub2">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="u"/>
+				<xs:element ref="i"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!---->
+	<xs:element name="sup2">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="u"/>
+				<xs:element ref="i"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- br - break, line break within a paragraph -->
+	<xs:element name="br">
+		<xs:complexType/>
+	</xs:element>
+	<!-- This element is one method to identify content consisting of text objects that require preservation (pre) of their whitespace in order to preserve internal logical relationships. (e.g., sequence listing fragments, computer program listings) -->
+	<xs:element name="pre">
+		<xs:complexType mixed="true">
+			<xs:attributeGroup ref="pre_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- definition list Recommended id = dlis01, dlis02, etc. -->
+	<xs:element name="dl">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="dt"/>
+				<xs:element ref="dd"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="dl_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- stopped here; kr/31.05.04, 11:00 Unordered Lists list-style may be empty for lists with no bullet or other symbol default list-style is 'bullets' Recommended id = ulis01, ulis02, etc. -->
+	<xs:element name="ul">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="li" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ul_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- Ordered Lists: attribute 'ol-style' - recommded use: ... 1 arabic numbers 1, 2, 3, ... a lower alpha a, b, c, ... A upper alpha A, B, C, ... i lower roman i, ii, iii, ... I upper roman I, II, III, ... -->
+	<xs:element name="ol">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="li" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="ol_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- a reference to a figure; e.g., "...as shown in figure 1..." -->
+	<xs:element name="figref">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="i"/>
+				<xs:element ref="u"/>
+				<xs:element ref="sup"/>
+				<xs:element ref="sub"/>
+				<xs:element ref="smallcaps"/>
+			</xs:choice>
+			<xs:attributeGroup ref="figref_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- PATENT CITATIONS: Patent Citation within abstract, description or claims. For patent citations within Search Report see Search Report DTD Notes: Tags arranged according to WIPO ST.14 order. This can be free text data without any structure (text). Example: US4793675AHanda19881227 Note: it is NOT expected that the applicant will create the tagged data - it could be generated from a 'pull down' data entry form or generated from internal SR databases Attributes (recommended): id - pcit01, pcit02, etc. num - 001, 002, etc. dnum - use full number as one string, eg, "US5401234A"; url - where possible give full web link to patent file - file name eg. if stored on local systems dnum-type - type of document number (e.g., application number, publication number) Attributes: dpn = document page number, ie page where cit. is url = web address -->
+	<xs:element name="patcit">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="text"/>
+				<xs:sequence>
+					<xs:element ref="document-id"/>
+					<xs:element ref="rel-passage" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:choice>
+			<xs:attributeGroup ref="patcit_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- Non-Patent Literature (NPL) CITation; Notes: This can be free text data without any structure (#PCDATA) which is NOT recommended or it can be highly structured data which is marked up according to ST.14 and ISO 690 layout; This part of the DTD has used many different sources for element names and DTD structure and reference: AACR2 / MARC ISO 12083 - Electronic manuscript prep. and markup. DTD Association of American Publishers (AAP) Z39.59 DTD European Working Group for SGML (EWS) MAJOUR DTD SuperJournal Full Article DTD www.superjournal.ac.uk/sj Elsevier DTD Medline DTD (NLM) Attributes (recommended): id - ncit1, ncit2, etc num - 0001, 0002 The TYPE of citation is office specific: (recommended):; A - Abstract citation of no specific kind B - Book citation I - Bilogical abstract citation C - Chemical abstracts citation E - Database citation D - Derwent citation P - Patent cited within NPL group J - Patent Abstracts of Japan citation (REC 067) S - Serial / Journal / Periodical citation W - World Wide Web / Internet search citation medium - the type of medium eg. CD (CD-ROM), MT (Magnetic Tape), DISK, ONLINE file - file name on local systems eg. XP number in EPO url - where possible give full web link to document Attributes: dpn = document page number, ie page where cit. is -->
+	<xs:element name="nplcit">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="text"/>
+				<xs:element ref="article"/>
+				<xs:element ref="book"/>
+				<xs:element ref="online"/>
+				<xs:element ref="othercit"/>
+			</xs:choice>
+			<xs:attributeGroup ref="nplcit_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- biological deposit citation (US EFS: biological-deposit) According to PCT Rule 13bis, EPC Rule 28 This covers all bio data references long and short within the description and/or claims Recommended id = biod01, biod02, etc. -->
+	<xs:element name="bio-deposit">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="depositary"/>
+				<xs:element ref="bio-accno"/>
+				<xs:element ref="date" minOccurs="0"/>
+				<xs:element ref="term" minOccurs="0"/>
+				<xs:element ref="dtext" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attributeGroup ref="bio-deposit_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- Cross reference to any other element with an identifier (id) -->
+	<xs:element name="crossref">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="i"/>
+				<xs:element ref="u"/>
+				<xs:element ref="sup"/>
+				<xs:element ref="sub"/>
+				<xs:element ref="smallcaps"/>
+			</xs:choice>
+			<xs:attributeGroup ref="crossref_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- image data image is used for any kind of image: art work, figures, complex work units (math, tables, chemistry), etc. Recommended: id = i01, i02, etc. he, wi = "11" - milimeters - height, width; file = file name,location; label - not used; alt = alternate text if image not shown; img-content = drawing is the default; img-format = common will be tiff, st33 and st35 in for backward compatibilty and, later, publication. orientation = orientation of the image (portrait | landscape). Default is portrait inline = (yes | no). Whether the image is to be presented inline or separated by line breaks. Default is no -->
+	<xs:element name="img">
+		<xs:complexType>
+			<xs:attributeGroup ref="img_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- chemistry Chemical formulae, ring structures, Markush structures, etc. For now treat as image data. Depending on industry support we may use, e.g., CML later Recommended id = chem01, chem02, etc -->
+	<xs:element name="chemistry">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="img"/>
+				<xs:sequence>
+					<xs:element ref="chem"/>
+					<xs:element ref="img" minOccurs="0"/>
+				</xs:sequence>
+			</xs:choice>
+			<xs:attributeGroup ref="chemistry_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!--
+    zee transform
+    end of MathML Character Entity section
+    Revision History:
+    
+    Initial draft (syntax = XML) 1997-05-09
+    Stephen Buswell
+    Revised 1997-05-14
+    Robert Miner
+    Revised 1997-06-29 and 1997-07-02
+    Stephen Buswell
+    Revised 1997-12-15
+    Stephen Buswell
+    Revised 1998-02-08
+    Stephen Buswell
+    Revised 1998-04-04
+    Stephen Buswell
+    Entities and small revisions 1999-02-21
+    David Carlisle
+    Added attribute definitionURL to ci and cn 1999-10-11
+    Nico Poppelier
+    Additions for MathML 2 1999-12-16
+    David Carlisle
+    Namespace support 2000-01-14
+    David Carlisle
+    XHTML Compatibility 2000-02-23
+    Murray Altheim
+    New content elements 2000-03-26
+    David Carlisle
+    Further revisions for MathML2 CR draft 2000-07-11
+    David Carlisle
+    Further revisions for MathML2 CR draft 2000-10-31
+    David Carlisle
+    
+    
+    end of MathML 2.0 DTD ................................................
+    .......................................................................
+  -->
+	<xs:element name="maths">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="img"/>
+				<xs:sequence>
+					<xs:element ref="math"/>
+					<xs:element ref="img" minOccurs="0"/>
+				</xs:sequence>
+			</xs:choice>
+			<xs:attributeGroup ref="maths_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- TABLES This is image data or coded according to OASIS Exchange model with modified cell 'entry' content Recommended id = tabl01, tabl02, etc. -->
+	<xs:element name="tables">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="img"/>
+				<xs:element ref="table"/>
+			</xs:choice>
+			<xs:attributeGroup ref="tables_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!---->
+	<xs:element name="table-external-doc">
+		<xs:complexType mixed="true">
+			<xs:attributeGroup ref="table-external-doc_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- the number of the referenced patent (or application) document -->
+	<xs:element name="doc-number" type="xs:string"/>
+	<!-- document kind code; e.g. A1 -->
+	<xs:element name="kind" type="xs:string"/>
+	<!-- ADDRESSBOOK GROUP: Holds name and contact information for individuals/organizations The LANG attribute is REQUIRED for certain document types, e.g. the JPO PCT Request where names and addresses may be repeated in two different languages. If no structure possible use text. -->
+	<xs:element name="addressbook">
+		<xs:complexType>
+			<xs:choice>
+				<xs:sequence>
+					<xs:group ref="name_group"/>
+					<xs:element ref="address"/>
+					<xs:element ref="phone" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="fax" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="email" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="url" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="ead" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="dtext" minOccurs="0"/>
+				</xs:sequence>
+				<xs:element ref="text"/>
+			</xs:choice>
+			<xs:attributeGroup ref="addressbook_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- A TIFF image of a signature -->
+	<xs:element name="fax-image">
+		<xs:complexType>
+			<xs:attributeGroup ref="fax-image_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!--
+    A simple text string is to be used as the basic electronic signature;
+    e.g., John Doe <text-string>/jd/</text-string>
+  -->
+	<xs:element name="text-string" type="xs:string"/>
+	<!--
+    A simple 'signature';
+    e.g., clicking a button labeled 'accept' or 'I agree'
+  -->
+	<xs:element name="click-wrap">
+		<xs:complexType/>
+	</xs:element>
+	<!-- term to be defined; Recommended id = dtrm01, dtrm02, etc. -->
+	<xs:element name="dt">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="i"/>
+				<xs:element ref="u"/>
+				<xs:element ref="sup"/>
+				<xs:element ref="sub"/>
+				<xs:element ref="smallcaps"/>
+			</xs:choice>
+			<xs:attributeGroup ref="dt_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="dd">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="i"/>
+				<xs:element ref="u"/>
+				<xs:element ref="sup"/>
+				<xs:element ref="sub"/>
+				<xs:element ref="smallcaps"/>
+				<xs:element ref="br"/>
+				<xs:element ref="pre"/>
+				<xs:element ref="patcit"/>
+				<xs:element ref="nplcit"/>
+				<xs:element ref="bio-deposit"/>
+				<xs:element ref="crossref"/>
+				<xs:element ref="figref"/>
+				<xs:element ref="img"/>
+				<xs:element ref="ul"/>
+				<xs:element ref="ol"/>
+				<xs:element ref="chemistry"/>
+				<xs:element ref="maths"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- list item Recommended id = list01, list02, etc. -->
+	<xs:element name="li">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="i"/>
+				<xs:element ref="u"/>
+				<xs:element ref="sup"/>
+				<xs:element ref="sub"/>
+				<xs:element ref="smallcaps"/>
+				<xs:element ref="br"/>
+				<xs:element ref="pre"/>
+				<xs:element ref="patcit"/>
+				<xs:element ref="nplcit"/>
+				<xs:element ref="bio-deposit"/>
+				<xs:element ref="crossref"/>
+				<xs:element ref="figref"/>
+				<xs:element ref="img"/>
+				<xs:element ref="dl"/>
+				<xs:element ref="ul"/>
+				<xs:element ref="ol"/>
+				<xs:element ref="chemistry"/>
+				<xs:element ref="maths"/>
+			</xs:choice>
+			<xs:attributeGroup ref="li_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- Relevant passage group within patent; most used in search reports - use text in abstract, description and claims -->
+	<xs:element name="rel-passage">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="text"/>
+				<xs:sequence maxOccurs="unbounded">
+					<xs:element ref="passage" maxOccurs="unbounded"/>
+					<xs:element ref="category" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="rel-claims" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- article citations within a 'host' document After patent citations the most common citations are articles within serials (periodicals, magazines), books and electronic (eg. internet) sources. This is a very complex and varied area to standardise. The tag set below is drawn from a number of sources as is the order of the tags (which in any case can be changed depending on the stylesheet used).; The order of tags is that of WIPO ST.14 / ISO 690 layout DROP, J.G. Integrated Circuit Personalization at the Module Level. IBM Tech. Dis. Bull. October 1974, Vol. 17, No. 5, p. 1344 and 1345. [XPnnnnnnnnnnn]. DROP, J.G.Integrated Circuit Personalization at the Module LevelIBM Tech. Dis. Bull.197410001751344 and 1345XP1234456 Note: it is NOT expected that the applicant will create the tagged data - it can be generated from a 'pull down' data entry form (eg. in Word) or generated from internal SR databases -->
+	<xs:element name="article">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="text"/>
+				<xs:sequence>
+					<xs:element ref="author" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="atl" minOccurs="0"/>
+					<xs:element ref="subname" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:choice>
+						<xs:element ref="serial"/>
+						<xs:element ref="book"/>
+					</xs:choice>
+					<xs:element ref="absno" minOccurs="0"/>
+					<xs:element ref="location" minOccurs="0"/>
+					<xs:element ref="class" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="keyword" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="cpyrt" minOccurs="0"/>
+					<xs:element ref="artid" minOccurs="0"/>
+					<xs:element ref="refno" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- book citation In the order specified by WIPO ST.14 and ISO 690 and AACR2 rules for layout WALTON, Herrmann. Microwave quantum theory. London : Sweet and Maxwell, 1973. ISBN 0123456789. Vol.2, p. 138 to 192. WALTON, HerrmanMicrowave quantum theoryLondonSweet and Maxwell19730000138 to 1920-1234-568-9 -->
+	<xs:element name="book">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="text"/>
+				<xs:sequence>
+					<xs:element ref="author" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:choice>
+						<xs:element ref="book-title" maxOccurs="unbounded"/>
+						<xs:element ref="conference"/>
+					</xs:choice>
+					<xs:sequence>
+						<xs:element ref="subtitle" minOccurs="0"/>
+						<xs:element ref="subname" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element ref="edition" minOccurs="0"/>
+						<xs:element ref="imprint" minOccurs="0"/>
+						<xs:element ref="descrip" minOccurs="0"/>
+						<xs:element ref="series" minOccurs="0"/>
+						<xs:element ref="absno" minOccurs="0"/>
+						<xs:element ref="location" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element ref="isbn" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element ref="pubid" minOccurs="0"/>
+						<xs:element ref="vid" minOccurs="0"/>
+						<xs:element ref="bookno" minOccurs="0"/>
+						<xs:element ref="notes" minOccurs="0"/>
+						<xs:element ref="class" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element ref="keyword" minOccurs="0" maxOccurs="unbounded"/>
+						<xs:element ref="cpyrt" minOccurs="0"/>
+						<xs:element ref="refno" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- online citation Revised according to ISO-690-2 - Electronic documents and parts thereof. Please refer to this standard for definitions and examples. See: http://www.nlc-bnc.ca/iso/tc46sc9/standard/690-2e.htm#Contents The tagging in fact is a mixture of article and book tags together with specific electronic source tags 'Online' is taken to mean any kind of electronic documentation: databases, internet, CD-Roms, DVD, email, etc EXAMPLES:; Kirk-Othmer Encyclopedia of Chemical Technology [online]. 3rd ed. New York : John Wiley, 1984 [cited 3 January 1990]. Available from: DIALOG Information Services, Palo Alto (Calif.). Kirk-Othmer Encyclopedia of Chemical Technology 3rd ed.New YorkJohn Wiley19840000dialog information services, palo alto (calif.).19900103 * Article on Internet: Clark, Carol. On the Threshold of a Brave New World. In Blueprint of the Body [online]. CNN.com, 2000. [cited 24 August 2000; 10:25 EST]. In-depth specials. Available from: [http://www.cnn.com/SPECIALS/2000/genome/story/overview/] Clark, CarolOn the Threshold of a Brave New WorldCNN.com, 2000In-depth specialshttp://www.cnn.com/SPECIALS/2000/genome/story/20000824; 10:25 est * Personal communication (e-mail) Thacker, Jane. MPEG-21 project stream on digital item identification [online]. Message to: [iso.tc46.sc9@nlc-bnc.ca]. 3 October 2000; 13:33 EST [cited 6 October 2000; 13:10 EST]. Message-ID: [002f01c02d60$051a64a0$22a2580c@vaio]. Personal communication. Thacker, JaneMPEG-21 project stream on digital item identification Message to: iso.tc46.sc9@nlc-bnc.ca 3 October 2000; 13:33 ESTPersonal communicationMessage-ID: 002f01c02d60$051a64a0$22a2580c@vaio 6 october 2000; 13:10 EST -->
+	<xs:element name="online">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="text"/>
+				<xs:sequence>
+					<xs:element ref="author" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="online-title" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="hosttitle" minOccurs="0"/>
+					<xs:element ref="subname" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="edition" minOccurs="0"/>
+					<xs:choice minOccurs="0">
+						<xs:element ref="serial"/>
+						<xs:element ref="book"/>
+					</xs:choice>
+					<xs:element ref="imprint" minOccurs="0"/>
+					<xs:element ref="pubdate" minOccurs="0"/>
+					<xs:element ref="history" minOccurs="0"/>
+					<xs:element ref="series" minOccurs="0"/>
+					<xs:element ref="hostno" minOccurs="0"/>
+					<xs:element ref="location" minOccurs="0"/>
+					<xs:element ref="notes" minOccurs="0"/>
+					<xs:element ref="avail"/>
+					<xs:element ref="class" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="keyword" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="cpyrt" minOccurs="0"/>
+					<xs:element ref="issn" minOccurs="0"/>
+					<xs:element ref="isbn" minOccurs="0"/>
+					<xs:element ref="datecit" minOccurs="0"/>
+					<xs:element ref="srchterm" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element ref="srchdate" minOccurs="0"/>
+					<xs:element ref="refno" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- other citations - free form -->
+	<xs:element name="othercit">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="b"/>
+				<xs:element ref="i"/>
+				<xs:element ref="u"/>
+				<xs:element ref="sup"/>
+				<xs:element ref="sub"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- information regarding the facility storing the biological deposit -->
+	<xs:element name="depositary">
+		<xs:complexType mixed="true">
+			<xs:sequence>
+				<xs:element ref="address" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- biological accession number: the identification assigned to the biological material by the depository -->
+	<xs:element name="bio-accno" type="xs:string"/>
+	<!-- identifies the period of time during which the depository must be able to furnish samples of the biological material. -->
+	<xs:element name="term" type="xs:string"/>
+	<!-- Descriptive text -->
+	<xs:element name="dtext" type="xs:string"/>
+	<!---->
+	<xs:element name="chem">
+		<xs:complexType>
+			<xs:attributeGroup ref="chem_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!--
+    .............................................................
+    The top-level element "math" contains MathML encoded
+    mathematics. The "math" element has the browser info
+    attributes iff it is also the browser interface element.
+  -->
+	<xs:element name="math">
+		<xs:complexType>
+			<xs:attributeGroup ref="math_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- ELEMENT math (#PCDATA) -->
+	<xs:element name="table" type="xs:string"/>
+	<!-- address components: Address formats differ from country to country. If no structure possible use text -->
+	<xs:element name="address" type="address_group"/>
+	<!-- telephone number -->
+	<xs:element name="phone" type="xs:string"/>
+	<!-- a TIFF image of a signature -->
+	<xs:element name="fax" type="xs:string"/>
+	<!-- email address -->
+	<xs:element name="email" type="xs:string"/>
+	<!-- Universal Resource Locator; e.g. www.wipo.int -->
+	<xs:element name="url" type="xs:string"/>
+	<!-- Electronic addresses other than email -->
+	<xs:element name="ead" type="xs:string"/>
+	<!-- passage within the cited patent literature -->
+	<xs:element name="passage" type="xs:string"/>
+	<!---->
+	<xs:element name="category" type="xs:string"/>
+	<!-- Claims to which cited document is relevant. ST.32 equivalent = B564 -->
+	<xs:element name="rel-claims" type="xs:string"/>
+	<!-- author Prime responsibility for the work there is no distinguishing between personal and corporate authors author element followed by name or addressbook information use the ID attribute if, for example, there is a need to distinguish between multiple authors. Can also include affiliation details Recommended id = auth01, auth02, etc. -->
+	<xs:element name="author">
+		<xs:complexType>
+			<xs:choice>
+				<xs:group ref="name_group"/>
+				<xs:element ref="addressbook"/>
+			</xs:choice>
+			<xs:attributeGroup ref="author_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- article title -->
+	<xs:element name="atl" type="xs:string"/>
+	<!-- Subordinate responsibility, e.g. editor, translator, etc. -->
+	<xs:element name="subname">
+		<xs:complexType>
+			<xs:choice>
+				<xs:group ref="name_group"/>
+				<xs:element ref="addressbook"/>
+			</xs:choice>
+			<xs:attributeGroup ref="subname_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- serial citation data: this describes the volume or issue as a whole and not a particular article within it. -->
+	<xs:element name="serial">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="sertitle"/>
+				<xs:element ref="alttitle" minOccurs="0"/>
+				<xs:element ref="subname" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element ref="issue" minOccurs="0"/>
+				<xs:element ref="imprint" minOccurs="0"/>
+				<xs:element ref="pubdate" minOccurs="0"/>
+				<xs:element ref="descrip" minOccurs="0"/>
+				<xs:element ref="notes" minOccurs="0"/>
+				<xs:element ref="issn" minOccurs="0"/>
+				<xs:element ref="isbn" minOccurs="0"/>
+				<xs:element ref="pubid" minOccurs="0"/>
+				<xs:element ref="vid" minOccurs="0"/>
+				<xs:element ref="ino" minOccurs="0"/>
+				<xs:element ref="cpyrt" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Abstract number -->
+	<xs:element name="absno" type="xs:string"/>
+	<!-- location within the cited work -->
+	<xs:element name="location">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="text"/>
+				<xs:sequence>
+					<xs:element ref="serpart" minOccurs="0"/>
+					<xs:element ref="sersect" minOccurs="0"/>
+					<xs:element ref="chapter" minOccurs="0"/>
+					<xs:element ref="pp" minOccurs="0"/>
+					<xs:element ref="column" minOccurs="0"/>
+					<xs:element ref="para" minOccurs="0"/>
+					<xs:element ref="line" minOccurs="0"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- copyright info. Copyright of publisher of serial -->
+	<xs:element name="cpyrt" type="xs:string"/>
+	<!-- Article unique ID - assigned by a publisher to an article -->
+	<xs:element name="artid" type="xs:string"/>
+	<!-- Reference number (general); for the EPO this is the XP number -->
+	<xs:element name="refno">
+		<xs:complexType mixed="true">
+			<xs:attributeGroup ref="refno_attlist"/>
+		</xs:complexType>
+	</xs:element>
+	<!-- the title of the cited book -->
+	<xs:element name="book-title" type="xs:string"/>
+	<!-- CONFERENCE GROUP / CITATION There is no standard way of citing conference proceedings; date of the conf. may come before or after place, for example. The tags are specified in a set order where it is not possible or correct then simply use text -->
+	<xs:element name="conference">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="text"/>
+				<xs:sequence>
+					<xs:element ref="conftitle"/>
+					<xs:element ref="date" minOccurs="0"/>
+					<xs:element ref="confno" minOccurs="0"/>
+					<xs:element ref="confplace" minOccurs="0"/>
+					<xs:element ref="confsponsor" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- book subtitle -->
+	<xs:element name="subtitle" type="xs:string"/>
+	<!-- edition statement -->
+	<xs:element name="edition" type="xs:string"/>
+	<!-- imprint: Publication / creation data Place of publication : publisher, date(s) of publication usually only date of publication is used for journal citations -->
+	<xs:element name="imprint">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="text"/>
+				<xs:sequence>
+					<xs:element ref="address" minOccurs="0"/>
+					<xs:element ref="name"/>
+					<xs:element ref="pubdate" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- Physical description - generally NOT used in citations in pats. eg. v., 27cm -->
+	<xs:element name="descrip" type="xs:string"/>
+	<!-- series statement -->
+	<xs:element name="series">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="text"/>
+				<xs:sequence>
+					<xs:element ref="mst"/>
+					<xs:element ref="msn" minOccurs="0"/>
+					<xs:element ref="issn" minOccurs="0"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- International standard book number -->
+	<xs:element name="isbn" type="xs:string"/>
+	<!-- Publisher's unique id -->
+	<xs:element name="pubid" type="xs:string"/>
+	<!-- Volume id/number -->
+	<xs:element name="vid" type="xs:string"/>
+	<!-- book number -->
+	<xs:element name="bookno" type="xs:string"/>
+	<!-- notes about the journal; e.g. Continues Journal of XYZ 1910-1998, published in French and English, etc. -->
+	<xs:element name="notes" type="xs:string"/>
+	<!-- the title of the electronic resource -->
+	<xs:element name="online-title" type="xs:string"/>
+	<!-- title of the host document/database -->
+	<xs:element name="hosttitle" type="xs:string"/>
+	<!-- publication date used in npl citations -->
+	<xs:element name="pubdate">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="sdate"/>
+				<xs:element ref="edate"/>
+				<xs:element ref="time"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- history of the article (not serial) -->
+	<xs:element name="history">
+		<xs:complexType>
+			<xs:choice>
+				<xs:element ref="text"/>
+				<xs:choice>
+					<xs:element ref="received"/>
+					<xs:element ref="accepted"/>
+					<xs:element ref="revised"/>
+					<xs:element ref="misc"/>
+				</xs:choice>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- numeration within host document -->
+	<xs:element name="hostno" type="xs:string"/>
+	<!-- Availability and access - REQUIRED use for URL, online database, ftp address, email, etc.; e.g. Available from Internet: http://www.epo.org Available from DIALOG Information Systems, Palo Alto (Calif.) -->
+	<xs:element name="avail" type="xs:string"/>
+	<!-- International standard serial number -->
+	<xs:element name="issn" type="xs:string"/>
+	<!-- date cited - date on which the citation was cited. May be different from srchdate below -->
+	<xs:element name="datecit">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="date"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Search terms -->
+	<xs:element name="srchterm" type="xs:string"/>
+	<!-- Date of search/retrieval YYYYMMDD -->
+	<xs:element name="srchdate">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="date"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- title: e.g., Mr., Mrs., Dr., Lord etc -->
+	<xs:element name="prefix" type="xs:string"/>
+	<!-- last, family, surname -->
+	<xs:element name="last-name" type="xs:string"/>
+	<!-- organisation name or company name -->
+	<xs:element name="orgname" type="xs:string"/>
+	<!-- First or given name(s), initial(s) -->
+	<xs:element name="first-name" type="xs:string"/>
+	<!-- middle name(s) or initial(s) -->
+	<xs:element name="middle-name" type="xs:string"/>
+	<!-- name suffix (e.g., II, Jr., Dip., Ing., BA, etc.) -->
+	<xs:element name="suffix" type="xs:string"/>
+	<!-- individual id -->
+	<xs:element name="iid" type="xs:string"/>
+	<!-- role, e.g. President, Chairman, etc. -->
+	<xs:element name="role" type="xs:string"/>
+	<!-- department, division, section, etc. name -->
+	<xs:element name="department" type="xs:string"/>
+	<!-- synonym -->
+	<xs:element name="synonym" type="xs:string"/>
+	<!-- registered number -->
+	<xs:element name="registered-number" type="xs:string"/>
+	<!-- serial title -->
+	<xs:element name="sertitle" type="xs:string"/>
+	<!-- Alternate title for serial eg. BMJ = British Medical Journal -->
+	<xs:element name="alttitle" type="xs:string"/>
+	<!-- issue designation; e.g.: Annual, 1971-, 1890-1972 -->
+	<xs:element name="issue" type="xs:string"/>
+	<!-- issue number -->
+	<xs:element name="ino" type="xs:string"/>
+	<!-- part within a serial -->
+	<xs:element name="serpart" type="xs:string"/>
+	<!-- serial section -->
+	<xs:element name="sersect" type="xs:string"/>
+	<!-- chapter, e.g., in a book. Example: Chapter 2 -->
+	<xs:element name="chapter" type="xs:string"/>
+	<!-- cited document page numbers -->
+	<xs:element name="pp">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="ppf"/>
+				<xs:element ref="ppl"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- cited document column numbers -->
+	<xs:element name="column">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="colf"/>
+				<xs:element ref="coll"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- referenced paragraph within cited work -->
+	<xs:element name="para">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="paraf"/>
+				<xs:element ref="paral"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- referenced line within cited work -->
+	<xs:element name="line">
+		<xs:complexType mixed="true">
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="linef"/>
+				<xs:element ref="linel"/>
+			</xs:choice>
+		</xs:complexType>
+	</xs:element>
+	<!-- Conference title -->
+	<xs:element name="conftitle" type="xs:string"/>
+	<!-- Conference number -->
+	<xs:element name="confno" type="xs:string"/>
+	<!-- Conference place -->
+	<xs:element name="confplace">
+		<xs:complexType mixed="true">
+			<xs:sequence>
+				<xs:element ref="address" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Conference sponsor -->
+	<xs:element name="confsponsor">
+		<xs:complexType mixed="true">
+			<xs:sequence>
+				<xs:element ref="addressbook" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- monographic series title -->
+	<xs:element name="mst" type="xs:string"/>
+	<!-- monographic series number -->
+	<xs:element name="msn" type="xs:string"/>
+	<!-- start date used in pubdate -->
+	<xs:element name="sdate" type="xs:string"/>
+	<!-- end date used in pubdate -->
+	<xs:element name="edate" type="xs:string"/>
+	<!-- time; format HHMM -->
+	<xs:element name="time" type="xs:string"/>
+	<!-- date article was received -->
+	<xs:element name="received">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="date"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- date article was accepted -->
+	<xs:element name="accepted">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="date"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- date article was revised -->
+	<xs:element name="revised">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="date"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- miscellaneous information relating to the history of the article; see ISO 12083 -->
+	<xs:element name="misc">
+		<xs:complexType mixed="true">
+			<xs:sequence>
+				<xs:element ref="date" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- Address, first line -->
+	<xs:element name="address-1" type="xs:string"/>
+	<!-- Address, second line -->
+	<xs:element name="address-2" type="xs:string"/>
+	<!-- Address, third line -->
+	<xs:element name="address-3" type="xs:string"/>
+	<!-- organizational mail code -->
+	<xs:element name="mailcode" type="xs:string"/>
+	<!-- Post Office Box number -->
+	<xs:element name="pobox" type="xs:string"/>
+	<!-- address room; e.g., Room 55B -->
+	<xs:element name="room" type="xs:string"/>
+	<!-- address floor, e.g., 10th -->
+	<xs:element name="address-floor" type="xs:string"/>
+	<!-- building information in address, e.g., Hoffman building -->
+	<xs:element name="building" type="xs:string"/>
+	<!-- street may contain house number or name -->
+	<xs:element name="street" type="xs:string"/>
+	<!---->
+	<xs:element name="city" type="xs:string"/>
+	<!-- County, parish, department, etc (mainly UK, USA) -->
+	<xs:element name="county" type="xs:string"/>
+	<!-- Region of country eg. state, province, etc. -->
+	<xs:element name="state" type="xs:string"/>
+	<!-- postal code or zip code -->
+	<xs:element name="postcode" type="xs:string"/>
+	<!-- cited document page, last -->
+	<xs:element name="ppl" type="xs:string"/>
+	<!-- cited document column, first -->
+	<xs:element name="colf" type="xs:string"/>
+	<!-- cited document column, last -->
+	<xs:element name="coll" type="xs:string"/>
+	<!-- cited paragraph, first -->
+	<xs:element name="paraf" type="xs:string"/>
+	<!-- cited paragraph, last -->
+	<xs:element name="paral" type="xs:string"/>
+	<!-- cited document line, first -->
+	<xs:element name="linef" type="xs:string"/>
+	<!-- cited document line, last -->
+	<xs:element name="linel" type="xs:string"/>
+</xs:schema>
