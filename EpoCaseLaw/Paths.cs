@@ -12,9 +12,14 @@ public static class Paths
     {
         get
         {
+            // An explicit EPO_DATA_ROOT wins even without source XML present
+            // (e.g. a container shipping only epo.db + models/ + native/).
+            var explicitRoot = Environment.GetEnvironmentVariable("EPO_DATA_ROOT");
+            if (!string.IsNullOrWhiteSpace(explicitRoot))
+                return explicitRoot;
+
             var candidates = new[]
             {
-                Environment.GetEnvironmentVariable("EPO_DATA_ROOT"),
                 FindDataRoot(AppContext.BaseDirectory),
                 FindDataRoot(Directory.GetCurrentDirectory()),
             };
