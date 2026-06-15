@@ -40,8 +40,6 @@ public static class HttpServerMode
             Console.Error.WriteLine("WARNING: --no-auth — /mcp is unauthenticated. Never expose this through a tunnel.");
 
         var builder = WebApplication.CreateBuilder();
-        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("ASPNETCORE_URLS")))
-            builder.WebHost.UseUrls($"http://localhost:{port}");
 
         builder.Services.AddEpoMcpServer().WithHttpTransport(o => o.Stateless = true);
 
@@ -49,6 +47,12 @@ public static class HttpServerMode
         _ = Task.Run(() => EpoCaseLaw.Embeddings.EmbedderCache.TryGet());
 
         var app = builder.Build();
+
+        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("ASPNETCORE_URLS")))
+        {
+            app.Urls.Clear();
+            app.Urls.Add($"http://localhost:{port}");
+        }
 
         app.MapGet("/health", () => Results.Json(new
         {
