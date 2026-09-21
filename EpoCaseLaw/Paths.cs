@@ -12,9 +12,14 @@ public static class Paths
     {
         get
         {
+            // An explicit EPO_DATA_ROOT wins even without source XML present
+            // (e.g. a container shipping only epo.db + models/ + native/).
+            var explicitRoot = Environment.GetEnvironmentVariable("EPO_DATA_ROOT");
+            if (!string.IsNullOrWhiteSpace(explicitRoot))
+                return explicitRoot;
+
             var candidates = new[]
             {
-                Environment.GetEnvironmentVariable("EPO_DATA_ROOT"),
                 FindDataRoot(AppContext.BaseDirectory),
                 FindDataRoot(Directory.GetCurrentDirectory()),
             };
@@ -44,6 +49,10 @@ public static class Paths
     {
         get
         {
+            var explicitPath = Environment.GetEnvironmentVariable("EPO_SQLITE_VEC_PATH");
+            if (!string.IsNullOrWhiteSpace(explicitPath))
+                return explicitPath;
+
             var ext = OperatingSystem.IsWindows() ? "dll" : OperatingSystem.IsMacOS() ? "dylib" : "so";
             return Path.Combine(DataRoot, "native", $"vec0.{ext}");
         }

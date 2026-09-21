@@ -247,7 +247,7 @@ public sealed class HybridSearch(SqliteConnection conn)
 
     private List<BookHit> SearchBookLexical(string query, string? source, int limit)
     {
-        var match = FtsHelper.BuildMatchQuery(query);
+        var match = FtsHelper.BuildBookMatchQuery(query);
         if (string.IsNullOrEmpty(match))
             return [];
 

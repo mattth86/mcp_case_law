@@ -46,10 +46,107 @@ Other maintenance commands:
   touching decisions; re-run `embed` afterwards for the new book chunks.
 - `fix-provisions` — re-normalize provision references stored raw, after normalizer improvements.
 
+## Remote HTTP mode (Copilot Studio / M365 Copilot)
+
+M365 Copilot consumes MCP servers over Streamable HTTP at a publicly reachable HTTPS endpoint;
+it cannot launch local stdio processes. `serve-http` runs the same 8 tools over HTTP without
+touching the stdio default:
+
+```bash
+dotnet build EpoCaseLaw -c Release
+export EPO_MCP_API_KEY=$(openssl rand -hex 32) && echo "$EPO_MCP_API_KEY"
+dotnet run --project EpoCaseLaw -c Release --no-build -- serve-http --port 5234
+```
+
+- The MCP endpoint is `http://localhost:5234/mcp` (Streamable HTTP, stateless). Requests must
+  carry the API key in the `x-api-key` header; anything else gets a 401.
+- The server refuses to start if `EPO_MCP_API_KEY` is unset. `--no-auth` disables the check for
+  local testing only — never use it behind a tunnel.
+- `GET /health` is unauthenticated and reports `{ status, db }` for tunnel/Azure probes.
+- `--port <n>` changes the port (default 5234); `ASPNETCORE_URLS`, if set, wins (e.g. in Docker).
+- Quick check (the dual `Accept` header is mandatory; single-event `text/event-stream`
+  responses are normal for the stateless transport):
+
+```bash
+curl -s http://localhost:5234/mcp -H "x-api-key: $EPO_MCP_API_KEY" \
+  -H "Content-Type: application/json" -H "Accept: application/json, text/event-stream" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
+
+Or use MCP Inspector: `npx @modelcontextprotocol/inspector`, transport "Streamable HTTP",
+URL `http://localhost:5234/mcp`, custom header `x-api-key`.
+
+### Expose with a dev tunnel
+
+Dev Tunnels keep a stable URL across restarts (ngrok free rotates URLs, which breaks the
+registered Copilot Studio tool):
+
+```bash
+devtunnel user login
+devtunnel create epo-mcp --allow-anonymous
+devtunnel port create epo-mcp -p 5234
+devtunnel host epo-mcp        # → https://<id>-5234.<region>.devtunnels.ms
+```
+
+`--allow-anonymous` makes the URL world-reachable — the API key is the only gate. Rotate the
+key after testing. Verify `tools/list` against `https://<tunnel-host>/mcp` before touching
+Copilot Studio.
+
+### Register in Copilot Studio
+
+1. Open or create an agent (generative orchestration).
+2. **Tools → + Add a tool → New tool → Model Context Protocol**.
+3. Server URL `https://<tunnel-host>/mcp`, Authentication **API key**, header name **`x-api-key`**.
+4. Create the connection with your key, then **Add to agent**.
+5. Test in the test pane (e.g. "Find decisions on added subject-matter under Art. 123(2) EPC").
+6. **Publish** → Channels → **Teams and Microsoft 365 Copilot** (tenant admin approval may be
+   needed in the M365 admin center → Integrated apps).
+
+M365 Copilot truncates large tool outputs; the defaults (limit ≤ 25, `max_chars` ≤ 20k) are
+fine — prefer `get_decision_passages` over `part: "full"` for long decisions.
+
+### Azure Container Apps (Phase B)
+
+The repo includes a `Dockerfile` that bakes `data/epo.db`, `data/models/`, and
+`data/native/vec0.so` into an `aspnet:10.0` image (the corpus is read-only and versioned, so
+an immutable image per corpus release beats SQLite over an Azure Files mount). Outline:
+
+```bash
+az acr build -r <registry> -t epo-mcp:1 .     # cloud build avoids uploading multi-GB layers twice
+az containerapp create ... --min-replicas 1 --cpu 2 --memory 4Gi \
+  --secrets epo-mcp-api-key=<key> --env-vars EPO_MCP_API_KEY=secretref:epo-mcp-api-key
+```
+
+Use `--min-replicas 1` to keep the image pulled and the ONNX model warm, point liveness/readiness
+probes at `/health`, then repoint the Copilot Studio tool URL at the Container Apps host.
+
 ## Environment
 
 - `EPO_DB_PATH` — override database file location (default: `epo.db` next to source data)
-- `EPO_DATA_ROOT` — override folder containing the XML/PDF source files
+- `EPO_DATA_ROOT` — override folder containing the XML/PDF source files (honored even when no
+  source XML is present, e.g. a container shipping only `epo.db` + `models/`)
+- `EPO_MCP_API_KEY` — required by `serve-http`; clients send it in the `x-api-key` header
+- `EPO_SQLITE_VEC_PATH` — optional absolute path to the platform-specific sqlite-vec library;
+  the code-only Docker image uses this to keep the Linux library in the image while the corpus
+  is mounted read-only
+
+## Code-only Docker image with an external corpus
+
+`Dockerfile.runtime` builds only the application and the small platform-specific sqlite-vec
+library. It deliberately does not copy `epo.db` or the ONNX model. Mount those from the host:
+
+```bash
+docker build -f Dockerfile.runtime -t epo-case-law-mcp:local .
+docker run --rm -p 5234:5234 \
+  -e EPO_MCP_API_KEY="$EPO_MCP_API_KEY" \
+  -v "$PWD/epo.db:/corpus/epo.db:ro" \
+  -v "$PWD/models:/corpus/models:ro" \
+  epo-case-law-mcp:local
+```
+
+`GET /health` returns 200 only when the database is indexed, all model files are present, and
+the Linux sqlite-vec extension loaded. A lexical-only fallback is reported as `degraded` and
+returns 503 so Compose does not quietly advertise incomplete hybrid search as ready.
 
 ## Alternatives
 

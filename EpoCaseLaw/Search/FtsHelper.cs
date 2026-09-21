@@ -6,7 +6,17 @@ namespace EpoCaseLaw.Search;
 
 public static partial class FtsHelper
 {
-    public static string BuildMatchQuery(string userQuery)
+    public static string BuildMatchQuery(string userQuery) =>
+        BuildMatchQuery(userQuery, includeCaseNumberColumn: true);
+
+    /// <summary>
+    /// FTS5 MATCH query for book_fts (section_id, title, breadcrumb, body only — no case_number column).
+    /// Case numbers are matched as phrases in the prose, not via a dedicated column.
+    /// </summary>
+    public static string BuildBookMatchQuery(string userQuery) =>
+        BuildMatchQuery(userQuery, includeCaseNumberColumn: false);
+
+    private static string BuildMatchQuery(string userQuery, bool includeCaseNumberColumn)
     {
         userQuery = userQuery.Trim();
         if (string.IsNullOrEmpty(userQuery))
@@ -16,7 +26,9 @@ public static partial class FtsHelper
         {
             var cn = CaseNumber.TryParseCanonical(userQuery);
             if (cn is not null)
-                return $"case_number : \"{Escape(cn)}\"";
+                return includeCaseNumberColumn
+                    ? $"case_number : \"{Escape(cn)}\""
+                    : EscapeQuoted(cn);
         }
 
         if (userQuery.StartsWith('"') && userQuery.EndsWith('"'))
@@ -31,7 +43,11 @@ public static partial class FtsHelper
         {
             var cn = CaseNumber.TryParseCanonical(m.Value);
             if (cn is not null)
-                clauses.Add($"(\"{Escape(cn)}\" OR case_number : \"{Escape(cn)}\")");
+            {
+                clauses.Add(includeCaseNumberColumn
+                    ? $"(\"{Escape(cn)}\" OR case_number : \"{Escape(cn)}\")"
+                    : EscapeQuoted(cn));
+            }
         }
 
         var remainder = clauses.Count > 0 ? InlineCaseNumberPattern().Replace(userQuery, " ") : userQuery;

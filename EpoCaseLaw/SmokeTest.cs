@@ -98,6 +98,14 @@ public static class SmokeTest
         var gl = search.SearchLegalTexts("clarity of claims", source: "guidelines", limit: 3);
         Console.Error.WriteLine($"search_legal_texts: {gl.RootElement.GetProperty("results").GetArrayLength()} results");
 
+        var glCase = search.SearchLegalTexts("G 1/19 computer simulation", source: "both", limit: 3);
+        if (glCase.RootElement.TryGetProperty("error", out _))
+        {
+            Console.Error.WriteLine("FAIL: search_legal_texts with case number in query");
+            Environment.Exit(1);
+        }
+        Console.Error.WriteLine($"search_legal_texts G 1/19: {glCase.RootElement.GetProperty("results").GetArrayLength()} results");
+
         var blankLegalText = search.SearchLegalTexts(" ", source: "guidelines", mode: "hybrid");
         if (!blankLegalText.RootElement.TryGetProperty("error", out _))
         {
