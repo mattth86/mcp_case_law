@@ -126,6 +126,27 @@ probes at `/health`, then repoint the Copilot Studio tool URL at the Container A
 - `EPO_DATA_ROOT` — override folder containing the XML/PDF source files (honored even when no
   source XML is present, e.g. a container shipping only `epo.db` + `models/`)
 - `EPO_MCP_API_KEY` — required by `serve-http`; clients send it in the `x-api-key` header
+- `EPO_SQLITE_VEC_PATH` — optional absolute path to the platform-specific sqlite-vec library;
+  the code-only Docker image uses this to keep the Linux library in the image while the corpus
+  is mounted read-only
+
+## Code-only Docker image with an external corpus
+
+`Dockerfile.runtime` builds only the application and the small platform-specific sqlite-vec
+library. It deliberately does not copy `epo.db` or the ONNX model. Mount those from the host:
+
+```bash
+docker build -f Dockerfile.runtime -t epo-case-law-mcp:local .
+docker run --rm -p 5234:5234 \
+  -e EPO_MCP_API_KEY="$EPO_MCP_API_KEY" \
+  -v "$PWD/epo.db:/corpus/epo.db:ro" \
+  -v "$PWD/models:/corpus/models:ro" \
+  epo-case-law-mcp:local
+```
+
+`GET /health` returns 200 only when the database is indexed, all model files are present, and
+the Linux sqlite-vec extension loaded. A lexical-only fallback is reported as `degraded` and
+returns 503 so Compose does not quietly advertise incomplete hybrid search as ready.
 
 ## Alternatives
 

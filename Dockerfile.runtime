@@ -1,0 +1,42 @@
+# Code-only runtime image for local Compose and deployments that mount the corpus.
+# The multi-gigabyte SQLite database and ONNX model stay outside the image.
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+COPY EpoCaseLaw/EpoCaseLaw.csproj EpoCaseLaw/
+RUN dotnet restore EpoCaseLaw/EpoCaseLaw.csproj
+
+COPY EpoCaseLaw/ EpoCaseLaw/
+RUN dotnet publish EpoCaseLaw/EpoCaseLaw.csproj -c Release -o /app/publish /p:UseAppHost=false
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+ARG TARGETARCH
+WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl \
+    && case "$TARGETARCH" in \
+         arm64) vec_arch="aarch64" ;; \
+         amd64) vec_arch="x86_64" ;; \
+         *) echo "Unsupported Docker architecture: $TARGETARCH" >&2; exit 1 ;; \
+       esac \
+    && mkdir -p /opt/epo-case-law/native \
+    && curl --fail --location --silent --show-error \
+       "https://github.com/asg017/sqlite-vec/releases/download/v0.1.9/sqlite-vec-0.1.9-loadable-linux-${vec_arch}.tar.gz" \
+       --output /tmp/sqlite-vec.tar.gz \
+    && tar -xzf /tmp/sqlite-vec.tar.gz -C /tmp \
+    && find /tmp -type f -name vec0.so -exec cp {} /opt/epo-case-law/native/vec0.so \; \
+    && test -s /opt/epo-case-law/native/vec0.so \
+    && rm -rf /var/lib/apt/lists/* /tmp/sqlite-vec.tar.gz /tmp/sqlite-vec
+
+COPY --from=build /app/publish ./
+
+ENV ASPNETCORE_URLS=http://0.0.0.0:5234 \
+    EPO_DATA_ROOT=/corpus \
+    EPO_DB_PATH=/corpus/epo.db \
+    EPO_SQLITE_VEC_PATH=/opt/epo-case-law/native/vec0.so
+
+EXPOSE 5234
+
+# EPO_MCP_API_KEY is required by serve-http and must be supplied at runtime.
+ENTRYPOINT ["dotnet", "EpoCaseLaw.dll", "serve-http"]

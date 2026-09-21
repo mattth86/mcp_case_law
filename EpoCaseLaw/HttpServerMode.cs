@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using EpoCaseLaw.Db;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,7 +42,7 @@ public static class HttpServerMode
 
         var builder = WebApplication.CreateBuilder();
 
-        builder.Services.AddEpoMcpServer().WithHttpTransport(o => o.Stateless = true);
+        builder.Services.AddEpoMcpServer(readOnly: true).WithHttpTransport(o => o.Stateless = true);
 
         // Warm the ONNX model off the startup path so the first hybrid query doesn't pay the load time.
         _ = Task.Run(() => EpoCaseLaw.Embeddings.EmbedderCache.TryGet());
@@ -54,11 +55,41 @@ public static class HttpServerMode
             app.Urls.Add($"http://localhost:{port}");
         }
 
-        app.MapGet("/health", () => Results.Json(new
+        app.MapGet("/health", () =>
         {
-            status = "ok",
-            db = File.Exists(Paths.DbPath),
-        }));
+            var dbExists = File.Exists(Paths.DbPath);
+            var indexed = dbExists && DbBootstrap.IsIndexed(Paths.DbPath);
+            var modelAvailable = File.Exists(Path.Combine(Paths.ModelsDir, "model.onnx"))
+                && File.Exists(Path.Combine(Paths.ModelsDir, "tokenizer.json"))
+                && File.Exists(Path.Combine(Paths.ModelsDir, "sentencepiece.bpe.model"));
+            var vectorExtensionLoaded = false;
+            if (indexed)
+            {
+                try
+                {
+                    using var connection = DbBootstrap.Open(Paths.DbPath, readOnly: true);
+                    vectorExtensionLoaded = DbBootstrap.VecExtensionLoaded(connection);
+                }
+                catch
+                {
+                    vectorExtensionLoaded = false;
+                }
+            }
+
+            var ready = indexed && modelAvailable && vectorExtensionLoaded;
+            return Results.Json(new
+            {
+                status = ready ? "ok" : "degraded",
+                ready,
+                database = new { exists = dbExists, indexed },
+                embeddings = new
+                {
+                    modelAvailable,
+                    vectorExtensionLoaded,
+                    searchMode = vectorExtensionLoaded && modelAvailable ? "hybrid" : "lexical",
+                },
+            }, statusCode: ready ? StatusCodes.Status200OK : StatusCodes.Status503ServiceUnavailable);
+        });
 
         if (!noAuth)
         {

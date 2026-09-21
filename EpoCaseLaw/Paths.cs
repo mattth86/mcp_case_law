@@ -49,6 +49,10 @@ public static class Paths
     {
         get
         {
+            var explicitPath = Environment.GetEnvironmentVariable("EPO_SQLITE_VEC_PATH");
+            if (!string.IsNullOrWhiteSpace(explicitPath))
+                return explicitPath;
+
             var ext = OperatingSystem.IsWindows() ? "dll" : OperatingSystem.IsMacOS() ? "dylib" : "so";
             return Path.Combine(DataRoot, "native", $"vec0.{ext}");
         }

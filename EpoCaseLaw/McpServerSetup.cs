@@ -17,9 +17,9 @@ public static class McpServerSetup
         activates automatically once embeddings are built (dotnet run --project EpoCaseLaw -- embed).
         """;
 
-    public static IMcpServerBuilder AddEpoMcpServer(this IServiceCollection services)
+    public static IMcpServerBuilder AddEpoMcpServer(this IServiceCollection services, bool readOnly = false)
     {
-        services.AddSingleton(new SearchService(Paths.DbPath));
+        services.AddSingleton(new SearchService(Paths.DbPath, ensureSchema: !readOnly));
         return services
             .AddMcpServer(o => o.ServerInstructions = ServerInstructions)
             .WithToolsFromAssembly();

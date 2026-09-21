@@ -13,10 +13,11 @@ public sealed class SearchService
 
     private readonly string dbPath;
 
-    public SearchService(string dbPath)
+    public SearchService(string dbPath, bool ensureSchema = true)
     {
         this.dbPath = dbPath;
-        DbBootstrap.EnsureSearchSchema(dbPath);
+        if (ensureSchema)
+            DbBootstrap.EnsureSearchSchema(dbPath);
     }
 
     public bool IsReady => DbBootstrap.IsIndexed(dbPath);
